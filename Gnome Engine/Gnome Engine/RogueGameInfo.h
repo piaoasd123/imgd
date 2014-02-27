@@ -19,6 +19,6 @@
 	{ \
 		for(int counte = 0; counte < 8; counte++) \
 		{ \
-			init_pair(counter * 8 + counte; counte, counter); \
+			init_pair(counter * 8 + counte, counte, counter); \
 		} \
-	};
+	}

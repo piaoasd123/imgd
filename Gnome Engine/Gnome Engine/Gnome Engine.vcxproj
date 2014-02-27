@@ -50,7 +50,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ConnectXPlayer|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -133,7 +133,9 @@
     <ClInclude Include="MapManager.h" />
     <ClInclude Include="Minimax.h" />
     <ClInclude Include="MinMaxSearcher.h" />
+    <ClInclude Include="NumWalker.h" />
     <ClInclude Include="Pile.h" />
+    <ClInclude Include="RandomWalker.h" />
     <ClInclude Include="RogueGame.h" />
     <ClInclude Include="RogueGameInfo.h" />
     <ClInclude Include="stdafx.h" />
@@ -163,7 +165,9 @@
     <ClCompile Include="MapManager.cpp" />
     <ClCompile Include="Minimax.cpp" />
     <ClCompile Include="MinMaxSearcher.cpp" />
+    <ClCompile Include="NumWalker.cpp" />
     <ClCompile Include="Pile.cpp" />
+    <ClCompile Include="RandomWalker.cpp" />
     <ClCompile Include="RogueGame.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -144,6 +144,12 @@
     <ClInclude Include="Dungeon.h">
       <Filter>Rogue Space\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RandomWalker.h">
+      <Filter>Rogue Space\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NumWalker.h">
+      <Filter>Rogue Space\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -219,6 +225,12 @@
       <Filter>Rogue Space\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Dungeon.cpp">
+      <Filter>Rogue Space\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RandomWalker.cpp">
+      <Filter>Rogue Space\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NumWalker.cpp">
       <Filter>Rogue Space\Source Files</Filter>
     </ClCompile>
   </ItemGroup>

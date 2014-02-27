@@ -19,6 +19,7 @@ public:
 	void remove(Content* obj);
 	Link<Content>* first;
 	void freeAll(void); //make sure all objects in list were newed!
+	LinkedList<Content>* copyList(); //creates a duplicate list pointing to all the same items
 };
 
 template<class Content> LinkedList<Content>::LinkedList(void)
@@ -79,4 +80,22 @@ template<class Content> void LinkedList<Content>::freeAll(void)
 		ptr = last;
 	}
 	first = nullptr;
+}
+
+//doublecheck this function
+template<class Content> LinkedList<Content>* LinkedList<Content>::copyList(void)
+{
+	LinkedList<Content>* dupList = new LinkedList<Content>();
+	Link<Content>* nextToDup = first;
+	Link<Content>** nextToPutDup = &(dupList->first);
+	while(nextToDup != nullptr)
+	{
+		*nextToPutDup = new Link<Content>;
+		(*nextToPutDup)->first = nextToDup->first;
+		//(*nextToPutDup)->next = nullptr; //this line is redundant
+		nextToPutDup = &((*nextToPutDup)->next);
+		nextToDup = nextToDup->next;
+	}
+	*nextToPutDup = nullptr;
+	return dupList;
 }

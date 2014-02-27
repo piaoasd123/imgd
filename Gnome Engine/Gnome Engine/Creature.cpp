@@ -20,3 +20,23 @@ ColorChar Creature::getColorChar(void)
 	retVal.glyph = face;
 	return retVal;
 }
+
+void Creature::step()
+{
+	//this will be extended by children
+}
+
+void Creature::takeInput(char input)
+{
+	//this will be extended by children
+}
+
+int Creature::getMyX()
+{
+	return here->myX;
+}
+
+int Creature::getMyY()
+{
+	return here->myY;
+}
