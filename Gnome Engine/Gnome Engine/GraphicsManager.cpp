@@ -46,7 +46,7 @@ void GraphicsManager::updateScreen(void)
 {
 	clear();
 	//draw everything
-	forEach(Camera, ptr, first)
+	forEach(Camera, ptr, getFirst())
 	{
 		ptr->first->drawMark();
 	}

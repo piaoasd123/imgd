@@ -5,12 +5,25 @@
 Creature::Creature(void)
 {
 	inventory = new Pile();
+	here = nullptr;
+}
+
+Creature::Creature(char face, int color)
+{
+	inventory = new Pile();
+	here = nullptr;
+	this->face = face;
+	skin = color;
 }
 
 
 Creature::~Creature(void)
 {
 	delete inventory;
+	if(here != nullptr)
+	{
+		here->getDungeon()->exit(getMyX(), getMyY());
+	}
 }
 
 ColorChar Creature::getColorChar(void)
@@ -39,4 +52,9 @@ int Creature::getMyX()
 int Creature::getMyY()
 {
 	return here->myY;
+}
+
+Cell* Creature::getMyLocation()
+{
+	return here;
 }

@@ -64,7 +64,7 @@ void MapManager::terminateMap(Map* in)
 
 void MapManager::sendInput(char in)
 {
-	forEach(Map, ptr, registeredForInput->first)
+	forEach(Map, ptr, registeredForInput->getFirst())
 	{
 		ptr->first->takeInput(in);
 	}
@@ -72,7 +72,7 @@ void MapManager::sendInput(char in)
 
 void MapManager::advanceActiveMaps(void)
 {
-	forEach(Map, ptr, activeMaps->first)
+	forEach(Map, ptr, activeMaps->getFirst())
 	{
 		ptr->first->step();
 	}

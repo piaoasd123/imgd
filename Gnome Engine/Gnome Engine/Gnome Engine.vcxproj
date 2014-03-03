@@ -124,6 +124,8 @@
     <ClInclude Include="curses.h" />
     <ClInclude Include="CycleManager.h" />
     <ClInclude Include="Dungeon.h" />
+    <ClInclude Include="FEBattleField.h" />
+    <ClInclude Include="FEUnit.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GraphicsManager.h" />
     <ClInclude Include="Item.h" />
@@ -155,6 +157,8 @@
     <ClCompile Include="Creature.cpp" />
     <ClCompile Include="CycleManager.cpp" />
     <ClCompile Include="Dungeon.cpp" />
+    <ClCompile Include="FEBattleField.cpp" />
+    <ClCompile Include="FEUnit.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Gnome Engine.cpp" />
     <ClCompile Include="GraphicsManager.cpp" />

@@ -12,10 +12,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Engine Space\Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Test Space">
       <UniqueIdentifier>{1e5d29be-b02b-4c36-bb23-16168e2c6742}</UniqueIdentifier>
     </Filter>
@@ -42,6 +38,10 @@
     </Filter>
     <Filter Include="ConnectX Space\Source Files">
       <UniqueIdentifier>{d5b76efa-3fb0-42de-ba71-a263289ff18c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine Space\Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +150,12 @@
     <ClInclude Include="NumWalker.h">
       <Filter>Rogue Space\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FEUnit.h">
+      <Filter>Rogue Space\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEBattleField.h">
+      <Filter>Rogue Space\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -231,6 +237,12 @@
       <Filter>Rogue Space\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NumWalker.cpp">
+      <Filter>Rogue Space\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEUnit.cpp">
+      <Filter>Rogue Space\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEBattleField.cpp">
       <Filter>Rogue Space\Source Files</Filter>
     </ClCompile>
   </ItemGroup>

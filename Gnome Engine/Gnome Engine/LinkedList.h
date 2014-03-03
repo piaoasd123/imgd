@@ -17,9 +17,11 @@ public:
 	virtual ~LinkedList(void);
 	void insert(Content* obj);
 	void remove(Content* obj);
-	Link<Content>* first;
+	Link<Content>* getFirst();
 	void freeAll(void); //make sure all objects in list were newed!
 	LinkedList<Content>* copyList(); //creates a duplicate list pointing to all the same items
+private:
+	Link<Content>* first;
 };
 
 template<class Content> LinkedList<Content>::LinkedList(void)
@@ -98,4 +100,9 @@ template<class Content> LinkedList<Content>* LinkedList<Content>::copyList(void)
 	}
 	*nextToPutDup = nullptr;
 	return dupList;
+}
+
+template<class Content> Link<Content>* LinkedList<Content>::getFirst()
+{
+	return first;
 }

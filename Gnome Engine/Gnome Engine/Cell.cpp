@@ -15,6 +15,7 @@ Cell::Cell(Dungeon* dungeon, int x, int y)
 
 Cell::~Cell(void)
 {
+	//write this later
 }
 
 ColorChar Cell::getColorChar(void)
@@ -46,6 +47,10 @@ void Cell::removeAdjecency(Cell* newCell)
 
 bool Cell::tryToMoveToCell(Cell* newCell, bool mustBeAdjecent)
 {
+	if(newCell == this)
+	{
+		return true;
+	}
 	if(occupant == nullptr || newCell == nullptr || newCell->hasOccupant())
 	{
 		return false;
@@ -53,7 +58,7 @@ bool Cell::tryToMoveToCell(Cell* newCell, bool mustBeAdjecent)
 	if(mustBeAdjecent)
 	{
 		bool contains = false;
-		forEach(Cell, counter, adjecentCells->first)
+		forEach(Cell, counter, adjecentCells->getFirst())
 		{
 			if(counter->first == newCell)
 			{
@@ -91,6 +96,11 @@ bool Cell::spawn(Creature* newCreature)
 	}
 }
 
+void Cell::despawn()
+{
+	occupant = nullptr;
+}
+
 LinkedList<Cell>* Cell::getAdjecentCells()
 {
 	return adjecentCells->copyList(); //add duplicate function to linkedList so
@@ -122,4 +132,9 @@ void Cell::takeInput(char in)
 Dungeon* Cell::getDungeon()
 {
 	return myDungeon;
+}
+
+Creature* Cell::getOccupant()
+{
+	return occupant;
 }

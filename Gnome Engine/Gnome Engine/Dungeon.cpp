@@ -97,6 +97,11 @@ bool Dungeon::enter(Creature* newCreature, int x, int y)
 	}
 }
 
+void Dungeon::exit(int x, int y)
+{
+	contents[x + y * width]->despawn();
+}
+
 Cell* Dungeon::getCell(int x, int y)
 {
 	return contents[x + y * width];
