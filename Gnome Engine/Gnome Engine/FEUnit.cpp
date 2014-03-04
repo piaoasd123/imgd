@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 
-FEUnit::FEUnit(char face, int skin, int team, int speed, int range, int might, int defense, int accuracy, int avoid, int hp) : Creature(face, skin)
+FEUnit::FEUnit(char face, int skin, int team, int speed, int range, int might, int defense, int accuracy, int avoid, int hp, string name) : Creature(face, skin)
 {
 	player = team;
 	move = speed;
@@ -14,6 +14,7 @@ FEUnit::FEUnit(char face, int skin, int team, int speed, int range, int might, i
 	this->avoid = avoid;
 	maxHp = hp;
 	currentHp = hp;
+	this->name = name;
 }
 
 
@@ -80,4 +81,39 @@ int FEUnit::getMove()
 int FEUnit::getRange()
 {
 	return range;
+}
+
+string FEUnit::getName()
+{
+	return name;
+}
+
+int FEUnit::getHp()
+{
+	return currentHp;
+}
+
+int FEUnit::getMight()
+{
+	return might;
+}
+
+int FEUnit::getDefense()
+{
+	return defense;
+}
+
+int FEUnit::getAccuracy()
+{
+	return accuracy;
+}
+
+int FEUnit::getAvoid()
+{
+	return avoid;
+}
+
+int FEUnit::getMaxHp()
+{
+	return maxHp;
 }

@@ -1,11 +1,12 @@
 #pragma once
 #include "dungeon.h"
 #include "FEUnit.h"
+#include "FEStatViewer.h"
 
 class FEBattleField :	public Dungeon
 {
 public:
-	FEBattleField(int numberOfPlayers, int height, int width);
+	FEBattleField(int numberOfPlayers, int height, int width, FEStatViewer* statWindow);
 	~FEBattleField(void);
 	void step();
 	void takeInput(char in);
@@ -26,5 +27,6 @@ private:
 	int getDistance(int startX, int startY, int endX, int endY);
 	bool attackMode; //true when done moving but about to attack
 	void finishMoving(); //to be called when a unit becomes inactive
+	FEStatViewer* statWindow;
 };
 

@@ -50,7 +50,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>false</LinkIncremental>
+    <LinkIncremental>true</LinkIncremental>
+    <GenerateManifest>false</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ConnectXPlayer|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -66,11 +67,12 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\Ian\Documents\Visual Studio 2010\Projects\PD Curses;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Ian\Documents\Visual Studio 2010\Projects\PD Curses;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Ian\Documents\Visual Studio 2010\Projects\Gnome Engine\PD Curses;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>curses.lib;pdcurses.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -124,7 +126,9 @@
     <ClInclude Include="curses.h" />
     <ClInclude Include="CycleManager.h" />
     <ClInclude Include="Dungeon.h" />
+    <ClInclude Include="FEAIInterface.h" />
     <ClInclude Include="FEBattleField.h" />
+    <ClInclude Include="FEStatViewer.h" />
     <ClInclude Include="FEUnit.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GraphicsManager.h" />
@@ -138,6 +142,7 @@
     <ClInclude Include="NumWalker.h" />
     <ClInclude Include="Pile.h" />
     <ClInclude Include="RandomWalker.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="RogueGame.h" />
     <ClInclude Include="RogueGameInfo.h" />
     <ClInclude Include="stdafx.h" />
@@ -157,7 +162,9 @@
     <ClCompile Include="Creature.cpp" />
     <ClCompile Include="CycleManager.cpp" />
     <ClCompile Include="Dungeon.cpp" />
+    <ClCompile Include="FEAIInterface.cpp" />
     <ClCompile Include="FEBattleField.cpp" />
+    <ClCompile Include="FEStatViewer.cpp" />
     <ClCompile Include="FEUnit.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Gnome Engine.cpp" />
@@ -188,6 +195,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Gnome Engine.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

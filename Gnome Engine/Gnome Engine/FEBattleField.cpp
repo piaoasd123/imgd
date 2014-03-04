@@ -4,7 +4,7 @@
 
 using namespace std;
 
-FEBattleField::FEBattleField(int numberOfPlayers, int height, int width) : Dungeon(height, width)
+FEBattleField::FEBattleField(int numberOfPlayers, int height, int width, FEStatViewer* statViewer) : Dungeon(height, width)
 {
 	activeUnit = nullptr;
 	cursorX = 0;
@@ -20,6 +20,7 @@ FEBattleField::FEBattleField(int numberOfPlayers, int height, int width) : Dunge
 		unitCounts[counter] = new LinkedList<FEUnit>();
 	}
 	attackMode = false;
+	statWindow = statViewer;
 }
 
 
@@ -124,6 +125,11 @@ void FEBattleField::takeInput(char in) //finish this function
 			{
 				cursorY--;
 				cursorY = max(cursorY, 0);
+			}
+			//if we moused over a unit, display it
+			if(contents[width * cursorY + cursorX]->hasOccupant())
+			{
+				statWindow->setUnit(static_cast<FEUnit*>(contents[width * cursorY + cursorX]->getOccupant()));
 			}
 		}
 		else if(in == 'a') //select

@@ -156,6 +156,15 @@
     <ClInclude Include="FEBattleField.h">
       <Filter>Rogue Space\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FEStatViewer.h">
+      <Filter>Rogue Space\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Engine Space\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEAIInterface.h">
+      <Filter>Engine Space\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -245,5 +254,16 @@
     <ClCompile Include="FEBattleField.cpp">
       <Filter>Rogue Space\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FEStatViewer.cpp">
+      <Filter>Rogue Space\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FEAIInterface.cpp">
+      <Filter>Engine Space\Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Gnome Engine.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
