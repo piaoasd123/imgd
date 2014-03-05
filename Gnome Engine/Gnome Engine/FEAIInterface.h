@@ -10,11 +10,13 @@ struct FEMoveOrder
 	FEUnit* attackTarget;
 };
 
+class FEBattleField;
+
 class FEAIInterface
 {
 public:
 	FEAIInterface(void);
 	virtual ~FEAIInterface(void);
 	//this function takes a list of units that can move and a snapshot of the current battlefield; it returns a struct encoding the next move
-	virtual FEMoveOrder getNextMove(FEBattleField* currentBattleField, LinkedList<FEUnit*> unitsToMove) = 0;
+	virtual FEMoveOrder getNextMove(FEBattleField* currentBattleField, LinkedList<FEUnit>* unitsToMove) = 0;
 };

@@ -2,6 +2,9 @@
 #include "dungeon.h"
 #include "FEUnit.h"
 #include "FEStatViewer.h"
+#include "FEAIInterface.h"
+
+class FEAIInterface;
 
 class FEBattleField :	public Dungeon
 {
@@ -13,6 +16,7 @@ public:
 	ColorChar getColorChar(int x, int y);
 	bool enter(Creature* newCreature, int x, int y);
 	void exit(int x, int y);
+	void setAI(FEAIInterface* newAI, int faction);
 private:
 	FEUnit* activeUnit; //this unit is selected
 	int cursorX;
@@ -28,5 +32,9 @@ private:
 	bool attackMode; //true when done moving but about to attack
 	void finishMoving(); //to be called when a unit becomes inactive
 	FEStatViewer* statWindow;
+	FEAIInterface** factionAIs;
+	LinkedList<FEUnit>* unitsToMove;
+	bool canMove(FEUnit* movingUnit, int x, int y);
+	bool canAttack(FEUnit* attackingUnit, int x, int y);
 };
 

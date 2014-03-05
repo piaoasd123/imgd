@@ -15,12 +15,15 @@ FEBattleField::FEBattleField(int numberOfPlayers, int height, int width, FEStatV
 	numPlayers = numberOfPlayers;
 	unitsOnField = 0;
 	unitCounts = new LinkedList<FEUnit>*[numberOfPlayers];
+	factionAIs = new FEAIInterface*[numberOfPlayers];
 	for(int counter = 0; counter < numberOfPlayers; counter++)
 	{
 		unitCounts[counter] = new LinkedList<FEUnit>();
+		factionAIs[counter] = nullptr;
 	}
 	attackMode = false;
 	statWindow = statViewer;
+	unitsToMove = new LinkedList<FEUnit>();
 }
 
 
@@ -29,6 +32,7 @@ FEBattleField::~FEBattleField(void)
 	for(int counter = 0; counter < numPlayers; counter++)
 	{
 		delete unitCounts[counter];
+		delete factionAIs;
 	}
 	delete unitCounts;
 }
@@ -81,6 +85,10 @@ bool FEBattleField::enter(Creature* newCreature, int x, int y)
 	}
 	unitsOnField++;
 	unitCounts[(static_cast <FEUnit*>(newCreature))->getTeam()]->insert(static_cast <FEUnit*>(newCreature));
+	if((static_cast <FEUnit*>(newCreature))->getTeam() == currentTurn)
+	{
+		unitsToMove->insert(static_cast <FEUnit*>(newCreature));
+	}
 	return true;
 }
 
@@ -94,13 +102,14 @@ void FEBattleField::exit(int x, int y)
 		}
 		totalUnits--;
 		unitCounts[static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam()]->remove(static_cast<FEUnit*>(contents[x + y * width]->getOccupant()));
+		unitsToMove->remove(static_cast<FEUnit*>(contents[x + y * width]->getOccupant()));
 	}
 	Dungeon::exit(x, y);
 }
 
 void FEBattleField::takeInput(char in) //finish this function
 {
-	if(moveCounter > 8)
+	if(moveCounter > 8 && factionAIs[currentTurn] == nullptr)
 	{
 		moveCounter = 0;
 		//if there's a num key, move the cursor
@@ -149,9 +158,7 @@ void FEBattleField::takeInput(char in) //finish this function
 			else if(attackMode)
 			{
 				//try to attack the unit at the indicated location
-				if(getDistance(activeUnit->getMyX(), activeUnit->getMyY(), cursorX, cursorY) <= activeUnit->getRange() &&
-					contents[cursorX + cursorY * width]->hasOccupant() &&
-					static_cast<FEUnit*>(contents[cursorX + cursorY * width]->getOccupant())->getTeam() != activeUnit->getTeam())
+				if(canAttack(activeUnit, cursorX, cursorY))
 				{
 					activeUnit->attack(static_cast<FEUnit*>(contents[cursorX + cursorY * width]->getOccupant()));
 					finishMoving();
@@ -160,7 +167,7 @@ void FEBattleField::takeInput(char in) //finish this function
 			else //a unit is selected, so try to move to the indicated location
 			{
 				//first check if there is enough range
-				if(getDistance(activeUnit->getMyX(), activeUnit->getMyY(), cursorX, cursorY) <= activeUnit->getMove())
+				if(canMove(activeUnit, cursorX, cursorY))
 				{
 					if(activeUnit->getMyLocation()->tryToMoveToCell(contents[cursorX + cursorY * width], false))
 					{
@@ -183,9 +190,24 @@ void FEBattleField::step()
 {
 	flashCounter = (flashCounter + 1) % 15;
 	moveCounter++;
+	if(moveCounter >= 24 && factionAIs[currentTurn] != nullptr)
+	{
+		FEMoveOrder thisOrder = factionAIs[currentTurn]->getNextMove(this, unitsToMove);
+		//execute the order
+		activeUnit = thisOrder.unitToMove;
+		if(canMove(activeUnit, thisOrder.endX, thisOrder.endY))
+		{
+			activeUnit->getMyLocation()->tryToMoveToCell(contents[thisOrder.endX + thisOrder.endY * width], false);
+		}
+		if(thisOrder.attackTarget != nullptr && canAttack(activeUnit, thisOrder.attackTarget->getMyX(), thisOrder.attackTarget->getMyY()))
+		{
+			activeUnit->attack(thisOrder.attackTarget);
+		}
+		finishMoving();
+	}
 }
 
-int FEBattleField::getDistance(int xStart, int yStart, int xEnd, int yEnd)
+inline int FEBattleField::getDistance(int xStart, int yStart, int xEnd, int yEnd)
 {
 	return abs(xStart - xEnd) + abs(yStart - yEnd);
 }
@@ -195,6 +217,7 @@ void FEBattleField::finishMoving()
 	if(activeUnit != nullptr)
 	{
 		activeUnit->deactivate();
+		unitsToMove->remove(activeUnit);
 	}
 	attackMode = false;
 	activeUnit = nullptr;
@@ -220,5 +243,24 @@ void FEBattleField::finishMoving()
 			currentTurn = (currentTurn + 1) % numPlayers;
 		}
 		while(unitCounts[currentTurn]->getFirst() == nullptr); //skip the turns of anyone with no units
+		delete unitsToMove;
+		unitsToMove = unitCounts[currentTurn]->copyList();
 	}
+}
+
+inline bool FEBattleField::canMove(FEUnit* movingUnit, int x, int y)
+{
+	return getDistance(movingUnit->getMyX(), movingUnit->getMyY(), x, y) <= movingUnit->getMove();
+}
+
+inline bool FEBattleField::canAttack(FEUnit* attackingUnit, int x, int y)
+{
+	return getDistance(attackingUnit->getMyX(), attackingUnit->getMyY(), x, y) <= attackingUnit->getRange() &&
+	contents[x + y * width]->hasOccupant() &&
+	static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != attackingUnit->getTeam();
+}
+
+void FEBattleField::setAI(FEAIInterface* newAI, int faction)
+{
+	factionAIs[faction] = newAI;
 }

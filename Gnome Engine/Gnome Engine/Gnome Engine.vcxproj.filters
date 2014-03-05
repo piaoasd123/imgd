@@ -163,7 +163,10 @@
       <Filter>Engine Space\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FEAIInterface.h">
-      <Filter>Engine Space\Header Files</Filter>
+      <Filter>Rogue Space\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SampleFEAI.h">
+      <Filter>Rogue Space\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -258,7 +261,10 @@
       <Filter>Rogue Space\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FEAIInterface.cpp">
-      <Filter>Engine Space\Source Files</Filter>
+      <Filter>Rogue Space\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SampleFEAI.cpp">
+      <Filter>Rogue Space\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
