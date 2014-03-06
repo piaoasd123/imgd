@@ -24,6 +24,9 @@ FEBattleField::FEBattleField(int numberOfPlayers, int height, int width, FEStatV
 	attackMode = false;
 	statWindow = statViewer;
 	unitsToMove = new LinkedList<FEUnit>();
+	terrainObjects = new int*[width];
+	for (int i = 0; i < width; i++)
+		terrainObjects[i] = new int[height];
 }
 
 
@@ -263,4 +266,29 @@ inline bool FEBattleField::canAttack(FEUnit* attackingUnit, int x, int y)
 void FEBattleField::setAI(FEAIInterface* newAI, int faction)
 {
 	factionAIs[faction] = newAI;
+}
+
+LinkedList<FEUnit>* FEBattleField::getPlayerUnits()
+{
+	return unitCounts[0];
+}
+
+LinkedList<FEUnit>* FEBattleField::getAIUnits()
+{
+	return unitCounts[1];
+}
+
+int FEBattleField::InitTerrain(int map[], int x, int y)
+{
+	if (x != width || y != height)
+		return -1;
+	else {
+		for (int i = 0; i < x; i++)
+		for (int j = 0; j < y; j++) {
+			if (map[i*y+j] == 1) {
+				terrainObjects[i][j] = map[i*y+j];
+				this->enter(new FEUnit('X', 4, 1, 0, 0, 0, 0, 0, 0, 0, "Rock   "), i, j);
+			}
+		}
+	}
 }

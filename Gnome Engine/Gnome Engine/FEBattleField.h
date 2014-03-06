@@ -17,6 +17,9 @@ public:
 	bool enter(Creature* newCreature, int x, int y);
 	void exit(int x, int y);
 	void setAI(FEAIInterface* newAI, int faction);
+	LinkedList<FEUnit>* FEBattleField::getPlayerUnits();
+	LinkedList<FEUnit>* FEBattleField::getAIUnits();
+	int InitTerrain(int map[], int x, int y);
 private:
 	FEUnit* activeUnit; //this unit is selected
 	int cursorX;
@@ -28,6 +31,7 @@ private:
 	int unitsOnField;
 	int totalUnits;
 	LinkedList<FEUnit>** unitCounts; //for determining when the game is over
+	int** terrainObjects;
 	int getDistance(int startX, int startY, int endX, int endY);
 	bool attackMode; //true when done moving but about to attack
 	void finishMoving(); //to be called when a unit becomes inactive
@@ -37,4 +41,3 @@ private:
 	bool canMove(FEUnit* movingUnit, int x, int y);
 	bool canAttack(FEUnit* attackingUnit, int x, int y);
 };
-
