@@ -126,8 +126,10 @@
     <ClInclude Include="curses.h" />
     <ClInclude Include="CycleManager.h" />
     <ClInclude Include="Dungeon.h" />
+    <ClInclude Include="FE.h" />
     <ClInclude Include="FEAIInterface.h" />
     <ClInclude Include="FEBattleField.h" />
+    <ClInclude Include="FEInfo.h" />
     <ClInclude Include="FEStatViewer.h" />
     <ClInclude Include="FEUnit.h" />
     <ClInclude Include="Game.h" />
@@ -163,6 +165,7 @@
     <ClCompile Include="Creature.cpp" />
     <ClCompile Include="CycleManager.cpp" />
     <ClCompile Include="Dungeon.cpp" />
+    <ClCompile Include="FE.cpp" />
     <ClCompile Include="FEAIInterface.cpp" />
     <ClCompile Include="FEBattleField.cpp" />
     <ClCompile Include="FEStatViewer.cpp" />

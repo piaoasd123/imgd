@@ -168,6 +168,12 @@
     <ClInclude Include="SampleFEAI.h">
       <Filter>Rogue Space\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FE.h">
+      <Filter>Rogue Space\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FEInfo.h">
+      <Filter>Rogue Space\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -264,6 +270,9 @@
       <Filter>Rogue Space\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SampleFEAI.cpp">
+      <Filter>Rogue Space\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FE.cpp">
       <Filter>Rogue Space\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
