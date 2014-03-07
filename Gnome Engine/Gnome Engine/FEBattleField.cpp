@@ -326,8 +326,8 @@ int FEBattleField::InitTerrain(int map[], int x, int y)
 	else {
 		for (int i = 0; i < x; i++)
 		for (int j = 0; j < y; j++) {
-			if (map[i*x+j] == 1) {
-				terrainObjects[i][j] = map[i*x+j];
+			if (map[i+j*x] == 1) {
+				terrainObjects[i][j] = map[i+j*x];
 				this->enter(new FEUnit('@', 0, 0, standard_rock, 0, SWORD, 0, 0, "Rock    "), i, j);
 			}
 		}
