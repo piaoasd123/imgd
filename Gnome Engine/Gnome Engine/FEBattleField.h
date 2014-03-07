@@ -40,4 +40,5 @@ private:
 	LinkedList<FEUnit>* unitsToMove;
 	bool canMove(FEUnit* movingUnit, int x, int y);
 	bool canAttack(FEUnit* attackingUnit, int x, int y);
+	bool canAttackSpace(FEUnit* attackingUnit, int x, int y);
 };

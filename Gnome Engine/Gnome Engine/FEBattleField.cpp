@@ -87,8 +87,7 @@ ColorChar FEBattleField::getColorChar(int x, int y)
 			{
 				retVal.color = (retVal.color % 8) + 24; //cyan background
 			}
-			else if(getDistance(activeUnit->getMyX(), activeUnit->getMyY(), x, y) <= activeUnit->getMove() + activeUnit->getRange() &&
-				canAttack(activeUnit, x, y))
+			else if(canAttackSpace(activeUnit, x, y))
 			{
 				retVal.color = (retVal.color % 8) + 40; //angry background
 			}
@@ -290,6 +289,14 @@ inline bool FEBattleField::canAttack(FEUnit* attackingUnit, int x, int y)
 	contents[x + y * width]->hasOccupant() &&
 	static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != attackingUnit->getTeam() &&
 	static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != 0;
+}
+
+inline bool FEBattleField::canAttackSpace(FEUnit* attackingUnit, int x, int y)
+{
+	return getDistance(attackingUnit->getMyX(), attackingUnit->getMyY(), x, y) <= attackingUnit->getRange() + attackingUnit->getMove() &&
+	(!contents[x + y * width]->hasOccupant() ||
+	(static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != attackingUnit->getTeam() &&
+	static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != 0));
 }
 
 void FEBattleField::setAI(FEAIInterface* newAI, int faction)
