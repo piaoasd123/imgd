@@ -235,6 +235,7 @@ void FEBattleField::step()
 			activeUnit->attack(thisOrder.attackTarget, canAttack(thisOrder.attackTarget, thisOrder.unitToMove->getMyX(), thisOrder.unitToMove->getMyY()));
 		}
 		finishMoving();
+		moveCounter = 0;
 	}
 }
 
@@ -315,12 +316,12 @@ void FEBattleField::setAI(FEAIInterface* newAI, int faction)
 
 LinkedList<FEUnit>* FEBattleField::getPlayerUnits()
 {
-	return unitCounts[0]->copyList();
+	return unitCounts[1]->copyList();
 }
 
 LinkedList<FEUnit>* FEBattleField::getAIUnits()
 {
-	return unitCounts[1]->copyList();
+	return unitCounts[2]->copyList();
 }
 
 int FEBattleField::InitTerrain(int map[], int x, int y)

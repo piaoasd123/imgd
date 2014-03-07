@@ -43,7 +43,7 @@ void RogueGame::initialize(void)
 					1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
 					1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
 					1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-	//sampleBattleField->setAI(new SampleFEAI(), 2);
+	sampleBattleField->setAI(new SampleFEAI(), 2);
 
 	StatBlock* lancelot_stats = new StatBlock(20, 15, 0, 8, 5, 7, 5, 5, 4, Proficiency());
 	StatBlock* galahad_stats = new StatBlock(20, 15, 0, 8, 5, 7, 5, 5, 4, Proficiency());
@@ -62,11 +62,7 @@ void RogueGame::initialize(void)
 	sampleBattleField->enter(robin, 4, 4);
 
 	sampleBattleField->InitTerrain(map, 10, 20);
-	//sampleBattleField->enter(new FEUnit('K', 4, 0, 6, 1, 6, 4, 100, 0, 8, "Lancelot"), 2, 2);
-	//sampleBattleField->enter(new FEUnit('A', 1, 1, 4, 2, 4, 0, 100, 0, 6, "Galehad "), 2, 4);
-	//sampleBattleField->enter(new FEUnit('K', 4, 0, 6, 1, 6, 4, 100, 0, 8, "Robin   "), 4, 2);
-	//sampleBattleField->enter(new FEUnit('A', 1, 1, 4, 2, 4, 0, 100, 0, 6, "William "), 4, 4);
-	//sampleBattleField->getCell(2, 2)->tryToMoveToCell(sampleBattleField->getCell(4, 3), FALSE);
+
 	Camera* cam = new Camera(sampleBattleField, 0, 0, -1, -1, 12, 22);
 	graph->insert(cam);
 	Camera* cam2 = new Camera(sampleStatViewer, 12, 0, 0, 0, 12, 8);

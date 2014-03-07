@@ -52,6 +52,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
+    <LibraryPath>C:\Users\Ian\Documents\GitHub\imgd\Gnome Engine\PD Curses;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ConnectXPlayer|Win32'">
     <LinkIncremental>true</LinkIncremental>
