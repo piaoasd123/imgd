@@ -37,8 +37,15 @@ bool FEUnit::attack(FEUnit* enemy, bool counter, FEConsole* log)
 		//hit
 		int total_damage = base_damage - enemy_dr;
 		int crit_chance = getCritChance() - enemy->getStats()->luck;
-		if( ( rand() % 100) <= crit_chance ) total_damage *= 2;
-		log->sendMessage("Hit!");
+		if( ( rand() % 100) <= crit_chance )
+		{
+			total_damage *= 3;
+			log->sendMessage("Critical hit!");
+		}
+		else
+		{
+			log->sendMessage("Hit!");
+		}
 		enemy_killed = enemy->modifyHP(-total_damage);
 		if(enemy_killed)
 		{
@@ -57,8 +64,15 @@ bool FEUnit::attack(FEUnit* enemy, bool counter, FEConsole* log)
 				{
 					int total_damage = base_damage - enemy_dr;
 					int crit_chance = getCritChance() - enemy->getStats()->luck;
-					if( ( rand() % 100) <= crit_chance ) total_damage *= 2;
-					log->sendMessage("Hit!");
+					if( ( rand() % 100) <= crit_chance )
+					{
+						total_damage *= 3;
+						log->sendMessage("Critical hit!");
+					}
+					else
+					{
+						log->sendMessage("Hit!");
+					}
 					bool enemy_killed = enemy->modifyHP(-total_damage);
 					if(enemy_killed)
 					{
