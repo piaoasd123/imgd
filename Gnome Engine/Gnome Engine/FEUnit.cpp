@@ -2,15 +2,11 @@
 #include "FEUnit.h"
 #include <stdlib.h>
 
-FEUnit::FEUnit(char _face, int _skin, int _team, StatBlock* _stats, int _range, int _minRange, WEAPON_TYPE _weapon_type, int _weapon_accuracy, int _weapon_crit, string _name) : Creature(_face, _skin)
+FEUnit::FEUnit(char _glyph, int _color, int _player, StatBlock* _stats, Item* _weapon, string _name) : Creature(_glyph, _color)
 {
-	player = _team;
+	player = _player;
 	stats = _stats;
-	range = _range;
-	minRange = _minRange;
-	weapon_type = _weapon_type;
-	weapon_accuracy = _weapon_accuracy;
-	weapon_crit = _weapon_crit;
+	weapon = _weapon;
 	name = _name;
 	currentHP = stats->max_hp;
 }
@@ -23,10 +19,10 @@ FEUnit::~FEUnit(void)
 bool FEUnit::attack(FEUnit* enemy, bool counter, FEConsole* log)
 {
 	//assume range is checked elsewhere
-	int enemy_dr = enemy->getDamageReduction(weapon_type);
-	int enemy_avoid = enemy->getAvoid(weapon_type);
-	int base_damage = getBaseDamage();
-	int base_accuracy = getBaseAccuracy();
+	int enemy_dr = enemy->getDamageReduction(weapon->type);
+	int enemy_avoid = enemy->getAvoid(weapon->type);
+	int base_damage = getMight();
+	int base_accuracy = getAccuracy();
 	bool enemy_killed = false;
 	string logMessage;
 	/*if(enemy_dr >= base_damage)
@@ -40,7 +36,7 @@ bool FEUnit::attack(FEUnit* enemy, bool counter, FEConsole* log)
 	{
 		//hit
 		int total_damage = base_damage - enemy_dr;
-		int crit_chance = getBaseCritChance() - enemy->getStats().luck;
+		int crit_chance = getCritChance() - enemy->getStats()->luck;
 		if( ( rand() % 100) <= crit_chance ) total_damage *= 2;
 		log->sendMessage("Hit!");
 		enemy_killed = enemy->modifyHP(-total_damage);
@@ -53,14 +49,14 @@ bool FEUnit::attack(FEUnit* enemy, bool counter, FEConsole* log)
 		{
 			bool killed_by_counter = false;
 			if (!counter) killed_by_counter = enemy->attack(this, true, log);
-			if(!killed_by_counter && stats->speed >= enemy->getStats().speed + 4) //double attack for high speed
+			if(!killed_by_counter && stats->speed >= enemy->getStats()->speed + 4) //double attack for high speed
 			{
 				log->sendMessage(name + " strikes again!");
 				toHitRoll = ( (rand() % 100) + (rand() % 100) ) / 2; //using dynamic hit
 				if(toHitRoll <= (base_accuracy - enemy_avoid))
 				{
 					int total_damage = base_damage - enemy_dr;
-					int crit_chance = getBaseCritChance() - enemy->getStats().luck;
+					int crit_chance = getCritChance() - enemy->getStats()->luck;
 					if( ( rand() % 100) <= crit_chance ) total_damage *= 2;
 					log->sendMessage("Hit!");
 					bool enemy_killed = enemy->modifyHP(-total_damage);
@@ -80,7 +76,7 @@ bool FEUnit::attack(FEUnit* enemy, bool counter, FEConsole* log)
 	return enemy_killed;
 }
 
-int FEUnit::getTeam()
+int FEUnit::getPlayer()
 {
 	return player;
 }
@@ -110,14 +106,9 @@ void FEUnit::deactivate()
 	isActive = false;
 }
 
-StatBlock FEUnit::getStats()
+StatBlock* FEUnit::getStats()
 {
-	return *stats;
-}
-
-int FEUnit::getRange()
-{
-	return range;
+	return stats;
 }
 
 string FEUnit::getName()
@@ -127,41 +118,41 @@ string FEUnit::getName()
 
 int FEUnit::getDamageReduction(WEAPON_TYPE against)
 {
-	int dr;
+	int dr = 0;
 	switch(against)
 	{
 	case SWORD:
 		dr = stats->defense;
-		if(weapon_type == AXE) dr += 1;
-		else if(weapon_type == LANCE) dr -= 1;
+		if(weapon->type == AXE) dr += 1;
+		else if(weapon->type == LANCE) dr -= 1;
 		break;
 	case AXE:
 		dr = stats->defense;
-		if(weapon_type == LANCE) dr += 1;
-		else if(weapon_type == SWORD) dr -= 1;
+		if(weapon->type == LANCE) dr += 1;
+		else if(weapon->type == SWORD) dr -= 1;
 		break;
 	case LANCE:
 		dr = stats->defense;
-		if(weapon_type == SWORD) dr += 1;
-		else if(weapon_type == AXE) dr -= 1;
+		if(weapon->type == SWORD) dr += 1;
+		else if(weapon->type == AXE) dr -= 1;
 		break;
 	case BOW:
 		dr = stats->defense;
 		break;
 	case ANIMA:
 		dr = stats->resist;
-		if(weapon_type == LIGHT) dr += 1;
-		else if(weapon_type == DARK) dr -= 1;
+		if(weapon->type == LIGHT) dr += 1;
+		else if(weapon->type == DARK) dr -= 1;
 		break;
 	case LIGHT:
 		dr = stats->resist;
-		if(weapon_type == DARK) dr += 1;
-		else if(weapon_type == ANIMA) dr -= 1;
+		if(weapon->type == DARK) dr += 1;
+		else if(weapon->type == ANIMA) dr -= 1;
 		break;
 	case DARK:
 		dr = stats->resist;
-		if(weapon_type == ANIMA) dr += 1;
-		else if(weapon_type == LIGHT) dr -= 1;
+		if(weapon->type == ANIMA) dr += 1;
+		else if(weapon->type == LIGHT) dr -= 1;
 		break;
 	case STAFF:
 		dr = 0;
@@ -176,30 +167,30 @@ int FEUnit::getAvoid(WEAPON_TYPE against)
 	switch(against)
 	{
 	case SWORD:
-		if(weapon_type == AXE) avoid += 15;
-		else if(weapon_type == LANCE) avoid -= 15;
+		if(weapon->type == AXE) avoid += 15;
+		else if(weapon->type == LANCE) avoid -= 15;
 		break;
 	case AXE:
-		if(weapon_type == LANCE) avoid += 15;
-		else if(weapon_type == SWORD) avoid -= 15;
+		if(weapon->type == LANCE) avoid += 15;
+		else if(weapon->type == SWORD) avoid -= 15;
 		break;
 	case LANCE:
-		if(weapon_type == SWORD) avoid += 15;
-		else if(weapon_type == AXE) avoid -= 15;
+		if(weapon->type == SWORD) avoid += 15;
+		else if(weapon->type == AXE) avoid -= 15;
 		break;
 	case BOW:
 		break;
 	case ANIMA:
-		if(weapon_type == LIGHT) avoid += 15;
-		else if(weapon_type == DARK) avoid -= 15;
+		if(weapon->type == LIGHT) avoid += 15;
+		else if(weapon->type == DARK) avoid -= 15;
 		break;
 	case LIGHT:
-		if(weapon_type == DARK) avoid += 15;
-		else if(weapon_type == ANIMA) avoid -= 15;
+		if(weapon->type == DARK) avoid += 15;
+		else if(weapon->type == ANIMA) avoid -= 15;
 		break;
 	case DARK:
-		if(weapon_type == ANIMA) avoid += 15;
-		else if(weapon_type == LIGHT) avoid -= 15;
+		if(weapon->type == ANIMA) avoid += 15;
+		else if(weapon->type == LIGHT) avoid -= 15;
 		break;
 	case STAFF:
 		break;
@@ -207,22 +198,22 @@ int FEUnit::getAvoid(WEAPON_TYPE against)
 	return avoid;
 }
 
-int FEUnit::getBaseDamage()
+int FEUnit::getMight()
 {
-	int base_damage;
-	if(weapon_type == SWORD || weapon_type == LANCE || weapon_type == AXE || weapon_type == BOW) base_damage = stats->strength;
-	else if(weapon_type == ANIMA || weapon_type == LIGHT || weapon_type == DARK || weapon_type == STAFF) base_damage = stats->magic;
+	int base_damage = weapon->might;
+	if(weapon->type == SWORD || weapon->type == LANCE || weapon->type == AXE || weapon->type == BOW) base_damage += stats->strength;
+	else if(weapon->type == ANIMA || weapon->type == LIGHT || weapon->type == DARK || weapon->type == STAFF) base_damage += stats->magic;
 	return base_damage;
 }
 
-int FEUnit::getBaseAccuracy()
+int FEUnit::getAccuracy()
 {
-	return stats->luck + (2 * stats->skill) + weapon_accuracy;
+	return stats->luck + (2 * stats->skill) + weapon->accuracy;
 }
 
-int FEUnit::getBaseCritChance()
+int FEUnit::getCritChance()
 {
-	return stats->skill /2 + weapon_crit;
+	return (stats->skill /2) + weapon->crit;
 }
 
 bool FEUnit::modifyHP(int change)
@@ -233,29 +224,24 @@ bool FEUnit::modifyHP(int change)
 	else return false;
 }
 
-int FEUnit::getMove()
-{
-	return stats->move;
-}
-
 int FEUnit::getCurrentHP()
 {
 	return currentHP;
 }
 
-int FEUnit::getMinRange()
-{
-	return minRange;
-}
-
 bool FEUnit::inRange(int distance)
 {
-	return distance >= minRange && distance <= range;
+	return distance >= weapon->min_range && distance <= weapon->max_range;
+}
+
+Item* FEUnit::getEquipped()
+{
+	return weapon;
 }
 
 FEUnit* FEUnit::clone()
 {
-	FEUnit* retVal = new FEUnit(face, skin, player, stats, range, minRange, weapon_type, weapon_accuracy, weapon_crit, name);
+	FEUnit* retVal = new FEUnit(face, skin, player, stats, weapon, name);
 	retVal->isActive = isActive;
 	retVal->currentHP = currentHP;
 	return retVal;
