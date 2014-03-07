@@ -2,7 +2,7 @@
 #include "Pile.h"
 
 
-Pile::Pile(void)
+Pile::Pile(void) : LinkedList<Item>()
 {
 }
 
