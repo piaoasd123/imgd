@@ -24,7 +24,7 @@ void RogueGame::initialize(void)
 	FEStatViewer* sampleStatViewer = new FEStatViewer();
 	FEBattleField* sampleBattleField = new FEBattleField(2, 7, 7, sampleStatViewer);
 	int map[49] = {	0, 0, 0, 0, 0, 0, 0,
-					0, 1, 0, 1, 0, 1, 0,		
+					0, 1, 1, 1, 0, 1, 0,		
 					0, 0, 0, 0, 0, 0, 0,		
 					0, 1, 0, 1, 0, 1, 0,		
 					0, 0, 0, 0, 0, 0, 0,		
