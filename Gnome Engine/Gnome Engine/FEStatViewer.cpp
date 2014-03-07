@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "FEStatViewer.h"
 
-#define HEIGHT 7
+#define HEIGHT 8
 #define WIDTH 12
 
 FEStatViewer::FEStatViewer(void)
@@ -45,38 +45,38 @@ void FEStatViewer::setUnit(FEUnit* newUnit)
 		if(counter < limit) screen[3+counter] = tempString[counter];
 		else screen[3+counter] = ' ';
 	}
-	StatBlock stats = newUnit->getStats();
+	StatBlock* stats = newUnit->getStats();
 	int temp = newUnit->getCurrentHP();
 	screen[15]=(temp/10) + 48;
 	screen[16]=(temp%10) + 48;
-	temp = stats.max_hp;
+	temp = stats->max_hp;
 	screen[18]=(temp/10) + 48;
 	screen[19]=(temp%10) + 48;
-	temp = stats.strength;
+	temp = stats->strength;
 	screen[27]=(temp/10) + 48;
 	screen[28]=(temp%10) + 48;
-	temp = stats.magic;
+	temp = stats->magic;
 	screen[33]=(temp/10) + 48;
 	screen[34]=(temp%10) + 48;
-	temp = stats.defense;
+	temp = stats->defense;
 	screen[39]=(temp/10) + 48;
 	screen[40]=(temp%10) + 48;
-	temp = stats.resist;
+	temp = stats->resist;
 	screen[45]=(temp/10) + 48;
 	screen[46]=(temp%10) + 48;
-	temp = stats.skill;
+	temp = stats->skill;
 	screen[51]=(temp/10) + 48;
 	screen[52]=(temp%10) + 48;
-	temp = stats.speed;
+	temp = stats->speed;
 	screen[57]=(temp/10) + 48;
 	screen[58]=(temp%10) + 48;
-	temp = stats.luck;
+	temp = stats->luck;
 	screen[63]=(temp/10) + 48;
 	screen[64]=(temp%10) + 48;
-	temp = newUnit->getBaseCritChance();
+	temp = newUnit->getCritChance();
 	screen[69]=(temp/10) + 48;
 	screen[70]=(temp%10) + 48;
-	temp = newUnit->getBaseAccuracy();
+	temp = newUnit->getAccuracy();
 	screen[75]=(temp/100) + 48;
 	screen[76]=((temp/10) % 10) + 48;
 	screen[77]=(temp%10) + 48;
@@ -84,10 +84,10 @@ void FEStatViewer::setUnit(FEUnit* newUnit)
 	screen[81]=(temp/100) + 48;
 	screen[82]=((temp/10) % 10) + 48;
 	screen[83]=(temp%10) + 48;
-	temp = stats.move;
+	temp = stats->move;
 	screen[87]=(temp/10) + 48;
 	screen[88]=(temp%10) + 48;
-	temp = newUnit->getRange();
+	temp = newUnit->getEquipped()->max_range;
 	screen[93]=(temp/10) + 48;
 	screen[94]=(temp%10) + 48;
 }
