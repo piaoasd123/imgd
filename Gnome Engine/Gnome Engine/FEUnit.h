@@ -65,7 +65,7 @@ using namespace std;
 class FEUnit :	public Creature
 {
 public:
-	FEUnit(char _face, int _skin, int _team, StatBlock* _stats, int _range, WEAPON_TYPE _weapon_type, int _weapon_accuracy, int _weapon_crit, string _name);
+	FEUnit(char _face, int _skin, int _team, StatBlock* _stats, int _range, int _minRange, WEAPON_TYPE _weapon_type, int _weapon_accuracy, int _weapon_crit, string _name);
 	~FEUnit(void);
 	bool attack(FEUnit* enemy, bool counter, FEConsole* log);
 	virtual ColorChar getColorChar();
@@ -84,11 +84,15 @@ public:
 	
 	bool modifyHP(int change); //returns true if unit is destroyed, otherwise false
 	int getRange();
+	int getMinRange();
+	bool inRange(int distance);
 	int getMove();
 	int getCurrentHP();
+	FEUnit* clone();
 private:
 	StatBlock* stats;
 	int range; //should be 1 to 6 or so //should come from first item in inventory
+	int minRange;
 	WEAPON_TYPE weapon_type; //should come from first item in inventory
 	int weapon_accuracy; //should come from first item in inventory
 	int weapon_crit; //should come from first item in inventory

@@ -23,6 +23,7 @@ public:
 	int InitTerrain(int map[], int x, int y);
 	bool* getValidFinalPositions(FEUnit* unitToMove);
 	bool* getValidAttackPositions(FEUnit* unitToMove);
+	FEBattleField* clone();//makes a duplicate of this battlefield with new units and all; probably not worth using but you guys want it
 private:
 	FEUnit* activeUnit; //this unit is selected
 	int cursorX;
@@ -31,10 +32,8 @@ private:
 	int flashCounter;
 	int currentTurn; //whose turn it is
 	int numPlayers;
-	int unitsOnField;
-	int totalUnits;
+	//int unitsOnField;
 	LinkedList<FEUnit>** unitCounts; //for determining when the game is over
-	int** terrainObjects;
 	int getDistance(int startX, int startY, int endX, int endY);
 	bool attackMode; //true when done moving but about to attack
 	void finishMoving(); //to be called when a unit becomes inactive

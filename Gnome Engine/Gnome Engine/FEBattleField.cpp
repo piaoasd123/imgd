@@ -14,7 +14,7 @@ FEBattleField::FEBattleField(int numberOfPlayers, int height, int width, FEStatV
 	flashCounter = 0;
 	currentTurn = 1;
 	numPlayers = numberOfPlayers + 1; //zero is reserved for terrain
-	unitsOnField = 0;
+	//unitsOnField = 0;
 	unitCounts = new LinkedList<FEUnit>*[numPlayers];
 	factionAIs = new FEAIInterface*[numPlayers];
 	for(int counter = 0; counter < numPlayers; counter++)
@@ -25,9 +25,6 @@ FEBattleField::FEBattleField(int numberOfPlayers, int height, int width, FEStatV
 	attackMode = false;
 	statWindow = statViewer;
 	unitsToMove = new LinkedList<FEUnit>();
-	terrainObjects = new int*[width];
-	for (int i = 0; i < width; i++)
-		terrainObjects[i] = new int[height];
 	attacklog = log;
 }
 
@@ -40,7 +37,6 @@ FEBattleField::~FEBattleField(void)
 		delete factionAIs;
 	}
 	delete unitCounts;
-	delete terrainObjects;
 }
 
 ColorChar FEBattleField::getColorChar(int x, int y)
@@ -111,9 +107,9 @@ bool FEBattleField::enter(Creature* newCreature, int x, int y)
 	{
 		return false;
 	}
-	unitsOnField++;
+	//unitsOnField++;
 	unitCounts[(static_cast <FEUnit*>(newCreature))->getTeam()]->insert(static_cast <FEUnit*>(newCreature));
-	if((static_cast <FEUnit*>(newCreature))->getTeam() == currentTurn)
+	if((static_cast <FEUnit*>(newCreature))->getTeam() == currentTurn && (static_cast <FEUnit*>(newCreature))->getIsActive())
 	{
 		unitsToMove->insert(static_cast <FEUnit*>(newCreature));
 	}
@@ -128,7 +124,6 @@ void FEBattleField::exit(int x, int y)
 		{
 			finishMoving();
 		}
-		totalUnits--;
 		unitCounts[static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam()]->remove(static_cast<FEUnit*>(contents[x + y * width]->getOccupant()));
 		unitsToMove->remove(static_cast<FEUnit*>(contents[x + y * width]->getOccupant()));
 	}
@@ -296,7 +291,7 @@ inline bool FEBattleField::canMove(FEUnit* movingUnit, int x, int y)
 
 inline bool FEBattleField::canAttack(FEUnit* attackingUnit, int x, int y)
 {
-	return getDistance(attackingUnit->getMyX(), attackingUnit->getMyY(), x, y) <= attackingUnit->getRange() &&
+	return attackingUnit->inRange(getDistance(attackingUnit->getMyX(), attackingUnit->getMyY(), x, y)) &&
 	contents[x + y * width]->hasOccupant() &&
 	static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != attackingUnit->getTeam() &&
 	static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != 0;
@@ -335,8 +330,7 @@ int FEBattleField::InitTerrain(int map[], int x, int y)
 		for (int j = 0; j < y; j++) {
 
 			if (map[i+j*x] == 1) {
-				terrainObjects[i][j] = map[i+j*x];
-				this->enter(new FEUnit('@', 0, 0, standard_rock, 0, SWORD, 0, 0, "Rock    "), i, j);
+				this->enter(new FEUnit('@', 0, 0, standard_rock, 0, 0, SWORD, 0, 0, "Rock    "), i, j);
 			}
 		}
 		return 0; //success
@@ -420,7 +414,7 @@ bool* FEBattleField::getValidAttackPositions(FEUnit* unitToMove)
 			for(int counte = 0; counte < size; counte++)
 			{
 				if(counter != counte &&
-					getDistance(counter % width, counter / width, counte % width, counte / width) <= unitToMove->getRange())
+					unitToMove->inRange(getDistance(counter % width, counter / width, counte % width, counte / width)))
 				{
 					strikeMap[counte] = true;
 				}
@@ -438,4 +432,18 @@ bool* FEBattleField::getValidAttackPositions(FEUnit* unitToMove)
 	}
 	delete standingPlaces;
 	return strikeMap;
+}
+
+FEBattleField* FEBattleField::clone()
+{
+	FEBattleField* retVal = new FEBattleField(numPlayers, height, width, nullptr, nullptr);
+	retVal->currentTurn = currentTurn;
+	for(int counter = 0; counter < numPlayers; counter++)
+	{
+		forEach(FEUnit, counte, unitCounts[counter]->getFirst())
+		{
+			retVal->enter(counte->first->clone(), counte->first->getMyX(), counte->first->getMyY());
+		}
+	}
+	return retVal;
 }

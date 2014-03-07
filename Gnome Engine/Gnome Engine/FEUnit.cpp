@@ -2,11 +2,12 @@
 #include "FEUnit.h"
 #include <stdlib.h>
 
-FEUnit::FEUnit(char _face, int _skin, int _team, StatBlock* _stats, int _range, WEAPON_TYPE _weapon_type, int _weapon_accuracy, int _weapon_crit, string _name) : Creature(_face, _skin)
+FEUnit::FEUnit(char _face, int _skin, int _team, StatBlock* _stats, int _range, int _minRange, WEAPON_TYPE _weapon_type, int _weapon_accuracy, int _weapon_crit, string _name) : Creature(_face, _skin)
 {
 	player = _team;
 	stats = _stats;
 	range = _range;
+	minRange = _minRange;
 	weapon_type = _weapon_type;
 	weapon_accuracy = _weapon_accuracy;
 	weapon_crit = _weapon_crit;
@@ -240,4 +241,22 @@ int FEUnit::getMove()
 int FEUnit::getCurrentHP()
 {
 	return currentHP;
+}
+
+int FEUnit::getMinRange()
+{
+	return minRange;
+}
+
+bool FEUnit::inRange(int distance)
+{
+	return distance >= minRange && distance <= range;
+}
+
+FEUnit* FEUnit::clone()
+{
+	FEUnit* retVal = new FEUnit(face, skin, player, stats, range, minRange, weapon_type, weapon_accuracy, weapon_crit, name);
+	retVal->isActive = isActive;
+	retVal->currentHP = currentHP;
+	return retVal;
 }
