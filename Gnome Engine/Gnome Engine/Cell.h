@@ -27,6 +27,8 @@ public:
 	void takeInput(char in);
 	Dungeon* getDungeon();
 	Creature* getOccupant();
+	int getMyX();
+	int getMyY();
 protected:
 	Creature* occupant; //the creature in this cell
 	//Pile* junk; //the items in this cell

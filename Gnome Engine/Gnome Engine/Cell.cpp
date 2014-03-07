@@ -138,3 +138,11 @@ Creature* Cell::getOccupant()
 {
 	return occupant;
 }
+
+int Cell::getMyX() {
+	return myX;
+}
+
+int Cell::getMyY() {
+	return myY;
+}

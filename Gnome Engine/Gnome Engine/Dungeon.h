@@ -22,6 +22,9 @@ public:
 	virtual bool enter(Creature* newCreature, int x, int y); //introduces a new creature to the dungeon
 	virtual void exit(int x, int y); //removes the creature at this point from the dungeon
 	Cell* getCell(int x, int y);
+	Cell** getCells();
+	int getMyX();
+	int getMyY();
 protected:
 	//lets assume all dungeons are on orthogonal grids
 	int height;

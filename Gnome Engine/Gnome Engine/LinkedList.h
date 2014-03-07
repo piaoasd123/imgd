@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-#define forEach(type, ptr, start) for(Link<type>* ptr = start; ptr != nullptr; ptr = ptr->next)
+#define forEach(type, ptr, start)for(Link<type>* ptr = start; ptr != nullptr; ptr = ptr->next)
 
 template<class Content> struct Link
 {

@@ -291,4 +291,5 @@ int FEBattleField::InitTerrain(int map[], int x, int y)
 			}
 		}
 	}
+	return 0;
 }

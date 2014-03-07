@@ -106,3 +106,15 @@ Cell* Dungeon::getCell(int x, int y)
 {
 	return contents[x + y * width];
 }
+
+Cell** Dungeon::getCells() {
+	return contents;
+}
+
+int Dungeon::getMyX() {
+	return width;
+}
+
+int Dungeon::getMyY() {
+	return height;
+}
