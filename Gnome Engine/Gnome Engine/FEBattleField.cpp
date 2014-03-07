@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "FEBattleField.h"
 #include <algorithm> 
+#include "SampleFEAI.h"
 
 using namespace std;
 
@@ -11,12 +12,12 @@ FEBattleField::FEBattleField(int numberOfPlayers, int height, int width, FEStatV
 	cursorY = 0;
 	moveCounter = 0;
 	flashCounter = 0;
-	currentTurn = 0;
-	numPlayers = numberOfPlayers;
+	currentTurn = 1;
+	numPlayers = numberOfPlayers + 1; //zero is reserved for terrain
 	unitsOnField = 0;
-	unitCounts = new LinkedList<FEUnit>*[numberOfPlayers];
-	factionAIs = new FEAIInterface*[numberOfPlayers];
-	for(int counter = 0; counter < numberOfPlayers; counter++)
+	unitCounts = new LinkedList<FEUnit>*[numPlayers];
+	factionAIs = new FEAIInterface*[numPlayers];
+	for(int counter = 0; counter < numPlayers; counter++)
 	{
 		unitCounts[counter] = new LinkedList<FEUnit>();
 		factionAIs[counter] = nullptr;
@@ -42,6 +43,28 @@ FEBattleField::~FEBattleField(void)
 
 ColorChar FEBattleField::getColorChar(int x, int y)
 {
+	if((x == -1 || x == width) && (y == -1 || y == height))
+	{
+		ColorChar retVal;
+		retVal.color = 16; //black on green
+		retVal.glyph = '+';
+		return retVal;
+	}
+	else if(y == -1 || y == height)
+	{
+		ColorChar retVal;
+		retVal.color = 16; //black on green
+		retVal.glyph = '-';
+		return retVal;
+	}
+	else if(x == -1 || x == width)
+	{
+		ColorChar retVal;
+		retVal.color = 16; //black on green
+		retVal.glyph = '|';
+		return retVal;
+	}
+
 	ColorChar retVal = contents[x + y * width]->getColorChar();
 	if(x == cursorX && y == cursorY && flashCounter > 10)
 	{
@@ -52,7 +75,7 @@ ColorChar FEBattleField::getColorChar(int x, int y)
 		if(attackMode)
 		{
 			if(getDistance(activeUnit->getMyX(), activeUnit->getMyY(), x, y) <= activeUnit->getRange() &&
-				(!contents[x + y * width]->hasOccupant() || static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != activeUnit->getTeam()))
+				canAttack(activeUnit, x, y))
 			{
 				retVal.color = (retVal.color % 8) + 40; //angry background
 			}
@@ -65,7 +88,7 @@ ColorChar FEBattleField::getColorChar(int x, int y)
 				retVal.color = (retVal.color % 8) + 24; //cyan background
 			}
 			else if(getDistance(activeUnit->getMyX(), activeUnit->getMyY(), x, y) <= activeUnit->getMove() + activeUnit->getRange() &&
-				(!contents[x + y * width]->hasOccupant() || static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != activeUnit->getTeam()))
+				canAttack(activeUnit, x, y))
 			{
 				retVal.color = (retVal.color % 8) + 40; //angry background
 			}
@@ -225,7 +248,7 @@ void FEBattleField::finishMoving()
 	attackMode = false;
 	activeUnit = nullptr;
 	//check if there are any activeUnits left of the current team
-	bool anyUnitsLeft = false;
+	/*bool anyUnitsLeft = false;
 	forEach(FEUnit, counter, unitCounts[currentTurn]->getFirst())
 	{
 		if(counter->first->getIsActive())
@@ -234,7 +257,8 @@ void FEBattleField::finishMoving()
 			break;
 		}
 	}
-	if(!anyUnitsLeft) //no units left to move so advance the turn
+	if(!anyUnitsLeft) //no units left to move so advance the turn*/
+	if(unitsToMove->getFirst() == nullptr)
 	{
 		//make all inactive units active
 		forEach(FEUnit, counter, unitCounts[currentTurn]->getFirst())
@@ -244,6 +268,10 @@ void FEBattleField::finishMoving()
 		do
 		{
 			currentTurn = (currentTurn + 1) % numPlayers;
+			if(currentTurn == 0) //zero is reserved for rocks
+			{
+				currentTurn++;
+			}
 		}
 		while(unitCounts[currentTurn]->getFirst() == nullptr); //skip the turns of anyone with no units
 		delete unitsToMove;
@@ -260,7 +288,8 @@ inline bool FEBattleField::canAttack(FEUnit* attackingUnit, int x, int y)
 {
 	return getDistance(attackingUnit->getMyX(), attackingUnit->getMyY(), x, y) <= attackingUnit->getRange() &&
 	contents[x + y * width]->hasOccupant() &&
-	static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != attackingUnit->getTeam();
+	static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != attackingUnit->getTeam() &&
+	static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != 0;
 }
 
 void FEBattleField::setAI(FEAIInterface* newAI, int faction)
@@ -270,12 +299,12 @@ void FEBattleField::setAI(FEAIInterface* newAI, int faction)
 
 LinkedList<FEUnit>* FEBattleField::getPlayerUnits()
 {
-	return unitCounts[0];
+	return unitCounts[0]->copyList();
 }
 
 LinkedList<FEUnit>* FEBattleField::getAIUnits()
 {
-	return unitCounts[1];
+	return unitCounts[1]->copyList();
 }
 
 int FEBattleField::InitTerrain(int map[], int x, int y)
@@ -287,7 +316,7 @@ int FEBattleField::InitTerrain(int map[], int x, int y)
 		for (int j = 0; j < y; j++) {
 			if (map[i*y+j] == 1) {
 				terrainObjects[i][j] = map[i*y+j];
-				this->enter(new FEUnit('X', 4, 1, 0, 0, 0, 0, 0, 0, 0, "Rock   "), i, j);
+				this->enter(new FEUnit('@', 0, 0, 0, 0, 0, 0, 0, 0, 0, "Rock    "), i, j);
 			}
 		}
 	}
