@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Gnome Engine">
+      <UniqueIdentifier>{48a3a023-77f6-44f4-972e-6b86426de1d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gnome Engine">
+      <UniqueIdentifier>{7531c658-deb2-425a-9af2-6fd528ec10db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Plasma Signet">
+      <UniqueIdentifier>{4aad3485-323d-4b50-999b-7d8d1c625268}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Plasma Signet">
+      <UniqueIdentifier>{23353097-e2ce-4441-8140-93a123c4332b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Gnome Engine\Source Files\Gnome Engine.cpp">
+      <Filter>Source Files\Gnome Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Gnome Engine\Source Files\LogManager.cpp">
+      <Filter>Source Files\Gnome Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Gnome Engine\Source Files\GraphicsManager.cpp">
+      <Filter>Source Files\Gnome Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Gnome Engine\Source Files\MapManager.cpp">
+      <Filter>Source Files\Gnome Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Gnome Engine\Source Files\LinkedList.cpp">
+      <Filter>Source Files\Gnome Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Gnome Engine\Source Files\CycleManager.cpp">
+      <Filter>Source Files\Gnome Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Gnome Engine\Source Files\Map.cpp">
+      <Filter>Source Files\Gnome Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Gnome Engine\Source Files\Camera.cpp">
+      <Filter>Source Files\Gnome Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Gnome Engine\Source Files\StopWatch.cpp">
+      <Filter>Source Files\Gnome Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Gnome Engine\Source Files\Game.cpp">
+      <Filter>Source Files\Gnome Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Dungeon.cpp">
+      <Filter>Source Files\Plasma Signet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Cell.cpp">
+      <Filter>Source Files\Plasma Signet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Creature.cpp">
+      <Filter>Source Files\Plasma Signet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Pile.cpp">
+      <Filter>Source Files\Plasma Signet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Item.cpp">
+      <Filter>Source Files\Plasma Signet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\NumWalker.cpp">
+      <Filter>Source Files\Plasma Signet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\RandomWalker.cpp">
+      <Filter>Source Files\Plasma Signet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\SampleFEAI.cpp">
+      <Filter>Source Files\Plasma Signet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\FEUnit.cpp">
+      <Filter>Source Files\Plasma Signet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\FEStatViewer.cpp">
+      <Filter>Source Files\Plasma Signet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\FEBattleField.cpp">
+      <Filter>Source Files\Plasma Signet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\FEAIInterface.cpp">
+      <Filter>Source Files\Plasma Signet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\FE.cpp">
+      <Filter>Source Files\Plasma Signet</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Gnome Engine\Headers\stdafx.h">
+      <Filter>Header Files\Gnome Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gnome Engine\Headers\LogManager.h">
+      <Filter>Header Files\Gnome Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gnome Engine\Headers\targetver.h">
+      <Filter>Header Files\Gnome Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gnome Engine\Headers\GraphicsManager.h">
+      <Filter>Header Files\Gnome Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gnome Engine\Headers\LinkedList.h">
+      <Filter>Header Files\Gnome Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gnome Engine\Headers\MapManager.h">
+      <Filter>Header Files\Gnome Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gnome Engine\Headers\CycleManager.h">
+      <Filter>Header Files\Gnome Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gnome Engine\Headers\Map.h">
+      <Filter>Header Files\Gnome Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gnome Engine\Headers\Camera.h">
+      <Filter>Header Files\Gnome Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gnome Engine\Headers\CurrentGameInfo.h">
+      <Filter>Header Files\Gnome Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gnome Engine\Headers\Game.h">
+      <Filter>Header Files\Gnome Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gnome Engine\Headers\StopWatch.h">
+      <Filter>Header Files\Gnome Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Dungeon.h">
+      <Filter>Header Files\Plasma Signet</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Creature.h">
+      <Filter>Header Files\Plasma Signet</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Cell.h">
+      <Filter>Header Files\Plasma Signet</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Pile.h">
+      <Filter>Header Files\Plasma Signet</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Item.h">
+      <Filter>Header Files\Plasma Signet</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\NumWalker.h">
+      <Filter>Header Files\Plasma Signet</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\RandomWalker.h">
+      <Filter>Header Files\Plasma Signet</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\SampleFEAI.h">
+      <Filter>Header Files\Plasma Signet</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\FEStatViewer.h">
+      <Filter>Header Files\Plasma Signet</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\FEInfo.h">
+      <Filter>Header Files\Plasma Signet</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\FEBattleField.h">
+      <Filter>Header Files\Plasma Signet</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\FEAIInterface.h">
+      <Filter>Header Files\Plasma Signet</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\FE.h">
+      <Filter>Header Files\Plasma Signet</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\FEUnit.h">
+      <Filter>Header Files\Plasma Signet</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

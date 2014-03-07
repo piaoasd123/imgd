@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Gnome Engine\Source Files\Camera.cpp" />
+    <ClCompile Include="..\Gnome Engine\Source Files\CycleManager.cpp" />
+    <ClCompile Include="..\Gnome Engine\Source Files\Game.cpp" />
+    <ClCompile Include="..\Gnome Engine\Source Files\Gnome Engine.cpp" />
+    <ClCompile Include="..\Gnome Engine\Source Files\GraphicsManager.cpp" />
+    <ClCompile Include="..\Gnome Engine\Source Files\LinkedList.cpp" />
+    <ClCompile Include="..\Gnome Engine\Source Files\LogManager.cpp" />
+    <ClCompile Include="..\Gnome Engine\Source Files\Map.cpp" />
+    <ClCompile Include="..\Gnome Engine\Source Files\MapManager.cpp" />
+    <ClCompile Include="..\Gnome Engine\Source Files\StopWatch.cpp" />
+    <ClCompile Include="Source Files\Cell.cpp" />
+    <ClCompile Include="Source Files\Creature.cpp" />
+    <ClCompile Include="Source Files\Dungeon.cpp" />
+    <ClCompile Include="Source Files\Item.cpp" />
+    <ClCompile Include="Source Files\NumWalker.cpp" />
+    <ClCompile Include="Source Files\Pile.cpp" />
+    <ClCompile Include="Source Files\FE.cpp" />
+    <ClCompile Include="Source Files\FEAIInterface.cpp" />
+    <ClCompile Include="Source Files\FEBattleField.cpp" />
+    <ClCompile Include="Source Files\FEStatViewer.cpp" />
+    <ClCompile Include="Source Files\FEUnit.cpp" />
+    <ClCompile Include="Source Files\RandomWalker.cpp" />
+    <ClCompile Include="Source Files\SampleFEAI.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Gnome Engine\Headers\Camera.h" />
+    <ClInclude Include="..\Gnome Engine\Headers\CurrentGameInfo.h" />
+    <ClInclude Include="..\Gnome Engine\Headers\CycleManager.h" />
+    <ClInclude Include="..\Gnome Engine\Headers\Game.h" />
+    <ClInclude Include="..\Gnome Engine\Headers\GraphicsManager.h" />
+    <ClInclude Include="..\Gnome Engine\Headers\LinkedList.h" />
+    <ClInclude Include="..\Gnome Engine\Headers\LogManager.h" />
+    <ClInclude Include="..\Gnome Engine\Headers\Map.h" />
+    <ClInclude Include="..\Gnome Engine\Headers\MapManager.h" />
+    <ClInclude Include="..\Gnome Engine\Headers\stdafx.h" />
+    <ClInclude Include="..\Gnome Engine\Headers\StopWatch.h" />
+    <ClInclude Include="..\Gnome Engine\Headers\targetver.h" />
+    <ClInclude Include="Headers\Cell.h" />
+    <ClInclude Include="Headers\Creature.h" />
+    <ClInclude Include="Headers\Dungeon.h" />
+    <ClInclude Include="Headers\Item.h" />
+    <ClInclude Include="Headers\NumWalker.h" />
+    <ClInclude Include="Headers\Pile.h" />
+    <ClInclude Include="Headers\FE.h" />
+    <ClInclude Include="Headers\FEAIInterface.h" />
+    <ClInclude Include="Headers\FEBattleField.h" />
+    <ClInclude Include="Headers\FEInfo.h" />
+    <ClInclude Include="Headers\FEStatViewer.h" />
+    <ClInclude Include="Headers\FEUnit.h" />
+    <ClInclude Include="Headers\RandomWalker.h" />
+    <ClInclude Include="Headers\SampleFEAI.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{19645298-A785-497C-AD14-B47071751D89}</ProjectGuid>
+    <RootNamespace>PlasmaSignet</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>R:\Plasma Signet\Plasma Signet\Headers;R:\Plasma Signet\Gnome Engine\Headers;R:\Plasma Signet\PD Curses;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>R:\Plasma Signet\PD Curses;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>curses.lib;pdcurses.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
