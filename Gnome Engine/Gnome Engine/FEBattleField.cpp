@@ -72,7 +72,7 @@ ColorChar FEBattleField::getColorChar(int x, int y)
 	{
 		if(attackMode)
 		{
-			if(getDistance(activeUnit->getMyX(), activeUnit->getMyY(), x, y) <= activeUnit->getRange() &&
+			if(getDistance(activeUnit->getMyX(), activeUnit->getMyY(), x, y) <= activeUnit->getEquipped()->max_range &&
 				canAttack(activeUnit, x, y))
 			{
 				retVal.color = (retVal.color % 8) + 40; //angry background
@@ -81,7 +81,7 @@ ColorChar FEBattleField::getColorChar(int x, int y)
 		else
 		{
 			//blue field can be moved to
-			//if(!contents[y * width + x]->hasOccupant() && getDistance(activeUnit->getMyX(), activeUnit->getMyY(), x, y) <= activeUnit->getMove())
+			//if(!contents[y * width + x]->hasOccupant() && getDistance(activeUnit->getMyX(), activeUnit->getMyY(), x, y) <= activeUnit->getStats()->move)
 			if(canMove(activeUnit, x, y))
 			{
 				retVal.color = (retVal.color % 8) + 24; //cyan background
@@ -108,8 +108,8 @@ bool FEBattleField::enter(Creature* newCreature, int x, int y)
 		return false;
 	}
 	//unitsOnField++;
-	unitCounts[(static_cast <FEUnit*>(newCreature))->getTeam()]->insert(static_cast <FEUnit*>(newCreature));
-	if((static_cast <FEUnit*>(newCreature))->getTeam() == currentTurn && (static_cast <FEUnit*>(newCreature))->getIsActive())
+	unitCounts[(static_cast <FEUnit*>(newCreature))->getPlayer()]->insert(static_cast <FEUnit*>(newCreature));
+	if((static_cast <FEUnit*>(newCreature))->getPlayer() == currentTurn && (static_cast <FEUnit*>(newCreature))->getIsActive())
 	{
 		unitsToMove->insert(static_cast <FEUnit*>(newCreature));
 	}
@@ -124,7 +124,7 @@ void FEBattleField::exit(int x, int y)
 		{
 			finishMoving();
 		}
-		unitCounts[static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam()]->remove(static_cast<FEUnit*>(contents[x + y * width]->getOccupant()));
+		unitCounts[static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getPlayer()]->remove(static_cast<FEUnit*>(contents[x + y * width]->getOccupant()));
 		unitsToMove->remove(static_cast<FEUnit*>(contents[x + y * width]->getOccupant()));
 	}
 	Dungeon::exit(x, y);
@@ -172,7 +172,7 @@ void FEBattleField::takeInput(char in) //finish this function
 				if(contents[cursorX + cursorY * width]->hasOccupant())
 				{
 					activeUnit = static_cast<FEUnit*> (contents[cursorX + cursorY * width]->getOccupant());
-					if(!activeUnit->getIsActive() || activeUnit->getTeam() != currentTurn)
+					if(!activeUnit->getIsActive() || activeUnit->getPlayer() != currentTurn)
 					{
 						activeUnit = nullptr; //can't select inactive units
 					}
@@ -293,8 +293,8 @@ inline bool FEBattleField::canAttack(FEUnit* attackingUnit, int x, int y)
 {
 	return attackingUnit->inRange(getDistance(attackingUnit->getMyX(), attackingUnit->getMyY(), x, y)) &&
 	contents[x + y * width]->hasOccupant() &&
-	static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != attackingUnit->getTeam() &&
-	static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != 0;
+	static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getPlayer() != attackingUnit->getPlayer() &&
+	static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getPlayer() != 0;
 }
 
 inline bool FEBattleField::canAttackSpace(FEUnit* attackingUnit, int x, int y)
@@ -323,6 +323,7 @@ LinkedList<FEUnit>* FEBattleField::getAIUnits()
 int FEBattleField::InitTerrain(int map[], int x, int y)
 {
 	StatBlock* standard_rock = new StatBlock(10, 0, 0, 0, 0, 0, 0, 0, 0, Proficiency());
+	Item* rock = new Item(ITEM, 0, 0, 0, 0, 0, 0);
 	if (x != width || y != height)
 		return -1;
 	else {
@@ -330,7 +331,7 @@ int FEBattleField::InitTerrain(int map[], int x, int y)
 		for (int j = 0; j < y; j++) {
 
 			if (map[i+j*x] == 1) {
-				this->enter(new FEUnit('@', 0, 0, standard_rock, 0, 0, SWORD, 0, 0, "Rock    "), i, j);
+				this->enter(new FEUnit('@', 0, 0, standard_rock, rock, "Rock"), i, j);
 			}
 		}
 		return 0; //success
@@ -345,7 +346,7 @@ bool* FEBattleField::getValidFinalPositions(FEUnit* unitToMove)
 		stepMap[counter] = -1;
 	}
 	stepMap[unitToMove->getMyX() + unitToMove->getMyY() * width] = 0;
-	for(int counter = 0; counter < unitToMove->getMove(); counter++)
+	for(int counter = 0; counter < unitToMove->getStats()->move; counter++)
 	{
 		for(int counte = 0; counte < size; counte++)
 		{
@@ -354,28 +355,28 @@ bool* FEBattleField::getValidFinalPositions(FEUnit* unitToMove)
 				//up
 				if(counte >= width && stepMap[counte - width] == -1 &&
 					(!contents[counte - width]->hasOccupant() ||
-					static_cast<FEUnit*>(contents[counte - width]->getOccupant())->getTeam() == unitToMove->getTeam()))
+					static_cast<FEUnit*>(contents[counte - width]->getOccupant())->getPlayer() == unitToMove->getPlayer()))
 				{
 					stepMap[counte - width] = counter + 1;
 				}
 				//down
 				if(counte < width * (height - 1) && stepMap[counte + width] == -1 &&
 					(!contents[counte + width]->hasOccupant() ||
-					static_cast<FEUnit*>(contents[counte + width]->getOccupant())->getTeam() == unitToMove->getTeam()))
+					static_cast<FEUnit*>(contents[counte + width]->getOccupant())->getPlayer() == unitToMove->getPlayer()))
 				{
 					stepMap[counte + width] = counter + 1;
 				}
 				//left
 				if(counte % width > 0 && stepMap[counte - 1] == -1 &&
 					(!contents[counte - 1]->hasOccupant() ||
-					static_cast<FEUnit*>(contents[counte - 1]->getOccupant())->getTeam() == unitToMove->getTeam()))
+					static_cast<FEUnit*>(contents[counte - 1]->getOccupant())->getPlayer() == unitToMove->getPlayer()))
 				{
 					stepMap[counte - 1] = counter + 1;
 				}
 				//right
 				if(counte % width > 0 && stepMap[counte + 1] == -1 &&
 					(!contents[counte + 1]->hasOccupant() ||
-					static_cast<FEUnit*>(contents[counte + 1]->getOccupant())->getTeam() == unitToMove->getTeam()))
+					static_cast<FEUnit*>(contents[counte + 1]->getOccupant())->getPlayer() == unitToMove->getPlayer()))
 				{
 					stepMap[counte + 1] = counter + 1;
 				}
@@ -424,8 +425,8 @@ bool* FEBattleField::getValidAttackPositions(FEUnit* unitToMove)
 	for(int counter = 0; counter < size; counter++)
 	{
 		if(contents[counter]->hasOccupant() &&
-			(static_cast<FEUnit*>(contents[counter]->getOccupant())->getTeam() == 0 ||
-			static_cast<FEUnit*>(contents[counter]->getOccupant())->getTeam() ==  unitToMove->getTeam()))
+			(static_cast<FEUnit*>(contents[counter]->getOccupant())->getPlayer() == 0 ||
+			static_cast<FEUnit*>(contents[counter]->getOccupant())->getPlayer() ==  unitToMove->getPlayer()))
 		{
 			strikeMap[counter] = false;
 		}
