@@ -6,7 +6,9 @@
 
 using namespace std;
 
-enum WEAPON_TYPE {SWORD, AXE, LANCE, BOW, ANIMA, LIGHT, DARK, STAFF, ITEM};
+#define NO_PLAYER 0
+#define RED_PLAYER 1
+#define BLUE_PLAYER 2
 
 struct Proficiency
 {
@@ -65,41 +67,41 @@ using namespace std;
 class FEUnit :	public Creature
 {
 public:
-	FEUnit(char _face, int _skin, int _team, StatBlock* _stats, int _range, int _minRange, WEAPON_TYPE _weapon_type, int _weapon_accuracy, int _weapon_crit, string _name);
+	FEUnit(char _face, int _skin, int _team, StatBlock* _stats, Item* _weapon, string _name);
 	~FEUnit(void);
 	bool attack(FEUnit* enemy, bool counter, FEConsole* log);
 	virtual ColorChar getColorChar();
-	int getTeam();
+	int getPlayer();
 	bool getIsActive();
 	void activate(); //make active
 	void deactivate(); //make inactive
 	string getName();
 	//stat getters
-	StatBlock getStats();
+	StatBlock* getStats();
 	int getDamageReduction(WEAPON_TYPE);
 	int getAvoid(WEAPON_TYPE);
-	int getBaseDamage(); //given weapon type, strength or magic
-	int getBaseAccuracy(); //given skill, luck, and weapon accuracy
-	int getBaseCritChance(); //given skill
-	
-	bool modifyHP(int change); //returns true if unit is destroyed, otherwise false
-	int getRange();
-	int getMinRange();
-	bool inRange(int distance);
-	int getMove();
+	int getMight(); //given weapon type, strength or magic
+	int getAccuracy(); //given skill, luck, and weapon accuracy
+	int getCritChance(); //given skill and weapon
 	int getCurrentHP();
+
+	void giveItem(Item* _item);
+	Pile* getInventory();
+	Item* getEquipped();
+
+	bool inRange(int distance);
+
+	bool modifyHP(int change); //returns true if unit is destroyed, otherwise false
+	
 	FEUnit* clone();
 private:
 	StatBlock* stats;
-	int range; //should be 1 to 6 or so //should come from first item in inventory
-	int minRange;
-	WEAPON_TYPE weapon_type; //should come from first item in inventory
-	int weapon_accuracy; //should come from first item in inventory
-	int weapon_crit; //should come from first item in inventory
+	Item* weapon;
+	int currentHP;
+
 	bool isActive; //if this unit has moved yet this turn; true means it can still move
 	int player; //the number of the player who owns this unit
 	string name; //like "Sir Fred" or whatever this individual guy is called
-	int currentHP;
 	
 //friend class FEBattleField;
 };
