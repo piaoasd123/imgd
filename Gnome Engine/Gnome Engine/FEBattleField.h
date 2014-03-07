@@ -20,6 +20,8 @@ public:
 	LinkedList<FEUnit>* FEBattleField::getPlayerUnits();
 	LinkedList<FEUnit>* FEBattleField::getAIUnits();
 	int InitTerrain(int map[], int x, int y);
+	bool* getValidFinalPositions(FEUnit* unitToMove);
+	bool* getValidAttackPositions(FEUnit* unitToMove);
 private:
 	FEUnit* activeUnit; //this unit is selected
 	int cursorX;
@@ -40,4 +42,5 @@ private:
 	LinkedList<FEUnit>* unitsToMove;
 	bool canMove(FEUnit* movingUnit, int x, int y);
 	bool canAttack(FEUnit* attackingUnit, int x, int y);
+	bool canAttackSpace(FEUnit* attackingUnit, int x, int y);
 };

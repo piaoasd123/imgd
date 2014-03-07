@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "FEBattleField.h"
 #include <algorithm> 
+#include "SampleFEAI.h"
 
 using namespace std;
 
@@ -11,12 +12,12 @@ FEBattleField::FEBattleField(int numberOfPlayers, int height, int width, FEStatV
 	cursorY = 0;
 	moveCounter = 0;
 	flashCounter = 0;
-	currentTurn = 0;
-	numPlayers = numberOfPlayers;
+	currentTurn = 1;
+	numPlayers = numberOfPlayers + 1; //zero is reserved for terrain
 	unitsOnField = 0;
-	unitCounts = new LinkedList<FEUnit>*[numberOfPlayers];
-	factionAIs = new FEAIInterface*[numberOfPlayers];
-	for(int counter = 0; counter < numberOfPlayers; counter++)
+	unitCounts = new LinkedList<FEUnit>*[numPlayers];
+	factionAIs = new FEAIInterface*[numPlayers];
+	for(int counter = 0; counter < numPlayers; counter++)
 	{
 		unitCounts[counter] = new LinkedList<FEUnit>();
 		factionAIs[counter] = nullptr;
@@ -38,10 +39,33 @@ FEBattleField::~FEBattleField(void)
 		delete factionAIs;
 	}
 	delete unitCounts;
+	delete terrainObjects;
 }
 
 ColorChar FEBattleField::getColorChar(int x, int y)
 {
+	if((x == -1 || x == width) && (y == -1 || y == height))
+	{
+		ColorChar retVal;
+		retVal.color = 16; //black on green
+		retVal.glyph = '+';
+		return retVal;
+	}
+	else if(y == -1 || y == height)
+	{
+		ColorChar retVal;
+		retVal.color = 16; //black on green
+		retVal.glyph = '-';
+		return retVal;
+	}
+	else if(x == -1 || x == width)
+	{
+		ColorChar retVal;
+		retVal.color = 16; //black on green
+		retVal.glyph = '|';
+		return retVal;
+	}
+
 	ColorChar retVal = contents[x + y * width]->getColorChar();
 	if(x == cursorX && y == cursorY && flashCounter > 10)
 	{
@@ -52,7 +76,7 @@ ColorChar FEBattleField::getColorChar(int x, int y)
 		if(attackMode)
 		{
 			if(getDistance(activeUnit->getMyX(), activeUnit->getMyY(), x, y) <= activeUnit->getRange() &&
-				(!contents[x + y * width]->hasOccupant() || static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != activeUnit->getTeam()))
+				canAttack(activeUnit, x, y))
 			{
 				retVal.color = (retVal.color % 8) + 40; //angry background
 			}
@@ -60,12 +84,12 @@ ColorChar FEBattleField::getColorChar(int x, int y)
 		else
 		{
 			//blue field can be moved to
-			if(!contents[y * width + x]->hasOccupant() && getDistance(activeUnit->getMyX(), activeUnit->getMyY(), x, y) <= activeUnit->getMove())
+			//if(!contents[y * width + x]->hasOccupant() && getDistance(activeUnit->getMyX(), activeUnit->getMyY(), x, y) <= activeUnit->getMove())
+			if(canMove(activeUnit, x, y))
 			{
 				retVal.color = (retVal.color % 8) + 24; //cyan background
 			}
-			else if(getDistance(activeUnit->getMyX(), activeUnit->getMyY(), x, y) <= activeUnit->getMove() + activeUnit->getRange() &&
-				(!contents[x + y * width]->hasOccupant() || static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != activeUnit->getTeam()))
+			else if(canAttackSpace(activeUnit, x, y))
 			{
 				retVal.color = (retVal.color % 8) + 40; //angry background
 			}
@@ -163,7 +187,10 @@ void FEBattleField::takeInput(char in) //finish this function
 				//try to attack the unit at the indicated location
 				if(canAttack(activeUnit, cursorX, cursorY))
 				{
-					activeUnit->attack(static_cast<FEUnit*>(contents[cursorX + cursorY * width]->getOccupant()));
+					activeUnit->attack(static_cast<FEUnit*>(contents[cursorX + cursorY * width]->getOccupant()),
+						canAttack(static_cast<FEUnit*>(contents[cursorX + cursorY * width]->getOccupant()),
+						activeUnit->getMyX(),
+						activeUnit->getMyY()));
 					finishMoving();
 				}
 			}
@@ -204,7 +231,7 @@ void FEBattleField::step()
 		}
 		if(thisOrder.attackTarget != nullptr && canAttack(activeUnit, thisOrder.attackTarget->getMyX(), thisOrder.attackTarget->getMyY()))
 		{
-			activeUnit->attack(thisOrder.attackTarget);
+			activeUnit->attack(thisOrder.attackTarget, canAttack(thisOrder.attackTarget, thisOrder.unitToMove->getMyX(), thisOrder.unitToMove->getMyY()));
 		}
 		finishMoving();
 	}
@@ -225,7 +252,7 @@ void FEBattleField::finishMoving()
 	attackMode = false;
 	activeUnit = nullptr;
 	//check if there are any activeUnits left of the current team
-	bool anyUnitsLeft = false;
+	/*bool anyUnitsLeft = false;
 	forEach(FEUnit, counter, unitCounts[currentTurn]->getFirst())
 	{
 		if(counter->first->getIsActive())
@@ -234,7 +261,8 @@ void FEBattleField::finishMoving()
 			break;
 		}
 	}
-	if(!anyUnitsLeft) //no units left to move so advance the turn
+	if(!anyUnitsLeft) //no units left to move so advance the turn*/
+	if(unitsToMove->getFirst() == nullptr)
 	{
 		//make all inactive units active
 		forEach(FEUnit, counter, unitCounts[currentTurn]->getFirst())
@@ -244,6 +272,10 @@ void FEBattleField::finishMoving()
 		do
 		{
 			currentTurn = (currentTurn + 1) % numPlayers;
+			if(currentTurn == 0) //zero is reserved for rocks
+			{
+				currentTurn++;
+			}
 		}
 		while(unitCounts[currentTurn]->getFirst() == nullptr); //skip the turns of anyone with no units
 		delete unitsToMove;
@@ -253,14 +285,26 @@ void FEBattleField::finishMoving()
 
 inline bool FEBattleField::canMove(FEUnit* movingUnit, int x, int y)
 {
-	return getDistance(movingUnit->getMyX(), movingUnit->getMyY(), x, y) <= movingUnit->getMove();
+	bool* inefficient = getValidFinalPositions(activeUnit);
+	bool retVal = inefficient[x + y * width];
+	delete inefficient;
+	return retVal;
 }
 
 inline bool FEBattleField::canAttack(FEUnit* attackingUnit, int x, int y)
 {
 	return getDistance(attackingUnit->getMyX(), attackingUnit->getMyY(), x, y) <= attackingUnit->getRange() &&
 	contents[x + y * width]->hasOccupant() &&
-	static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != attackingUnit->getTeam();
+	static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != attackingUnit->getTeam() &&
+	static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != 0;
+}
+
+inline bool FEBattleField::canAttackSpace(FEUnit* attackingUnit, int x, int y)
+{
+	bool* inefficient = getValidAttackPositions(activeUnit);
+	bool retVal = inefficient[x + y * width];
+	delete inefficient;
+	return retVal;
 }
 
 void FEBattleField::setAI(FEAIInterface* newAI, int faction)
@@ -270,26 +314,127 @@ void FEBattleField::setAI(FEAIInterface* newAI, int faction)
 
 LinkedList<FEUnit>* FEBattleField::getPlayerUnits()
 {
-	return unitCounts[0];
+	return unitCounts[0]->copyList();
 }
 
 LinkedList<FEUnit>* FEBattleField::getAIUnits()
 {
-	return unitCounts[1];
+	return unitCounts[1]->copyList();
 }
 
 int FEBattleField::InitTerrain(int map[], int x, int y)
 {
+	StatBlock* standard_rock = new StatBlock(10, 0, 0, 0, 0, 0, 0, 0, 0, Proficiency());
 	if (x != width || y != height)
 		return -1;
 	else {
 		for (int i = 0; i < x; i++)
 		for (int j = 0; j < y; j++) {
-			if (map[i*y+j] == 1) {
-				terrainObjects[i][j] = map[i*y+j];
-				this->enter(new FEUnit('X', 4, 1, 0, 0, 0, 0, 0, 0, 0, "Rock   "), i, j);
+<<<<<<< HEAD
+
+=======
+>>>>>>> c53b9a4dad98085d53cbac152a966fc59e3e7dc9
+			if (map[i+j*x] == 1) {
+				terrainObjects[i][j] = map[i+j*x];
+				this->enter(new FEUnit('@', 0, 0, standard_rock, 0, SWORD, 0, 0, "Rock    "), i, j);
+			}
+		}
+		return 0; //success
+	}
+}
+
+bool* FEBattleField::getValidFinalPositions(FEUnit* unitToMove)
+{
+	int* stepMap = new int[size];
+	for(int counter = 0; counter < size; counter++)
+	{
+		stepMap[counter] = -1;
+	}
+	stepMap[unitToMove->getMyX() + unitToMove->getMyY() * width] = 0;
+	for(int counter = 0; counter < unitToMove->getMove(); counter++)
+	{
+		for(int counte = 0; counte < size; counte++)
+		{
+			if(stepMap[counte] == counter) //take a step
+			{
+				//up
+				if(counte >= width && stepMap[counte - width] == -1 &&
+					(!contents[counte - width]->hasOccupant() ||
+					static_cast<FEUnit*>(contents[counte - width]->getOccupant())->getTeam() == unitToMove->getTeam()))
+				{
+					stepMap[counte - width] = counter + 1;
+				}
+				//down
+				if(counte < width * (height - 1) && stepMap[counte + width] == -1 &&
+					(!contents[counte + width]->hasOccupant() ||
+					static_cast<FEUnit*>(contents[counte + width]->getOccupant())->getTeam() == unitToMove->getTeam()))
+				{
+					stepMap[counte + width] = counter + 1;
+				}
+				//left
+				if(counte % width > 0 && stepMap[counte - 1] == -1 &&
+					(!contents[counte - 1]->hasOccupant() ||
+					static_cast<FEUnit*>(contents[counte - 1]->getOccupant())->getTeam() == unitToMove->getTeam()))
+				{
+					stepMap[counte - 1] = counter + 1;
+				}
+				//right
+				if(counte % width > 0 && stepMap[counte + 1] == -1 &&
+					(!contents[counte + 1]->hasOccupant() ||
+					static_cast<FEUnit*>(contents[counte + 1]->getOccupant())->getTeam() == unitToMove->getTeam()))
+				{
+					stepMap[counte + 1] = counter + 1;
+				}
 			}
 		}
 	}
-	return 0;
+	bool* retVal = new bool[size];
+	for(int counter = 0; counter < size; counter++)
+	{
+		if(stepMap[counter] != -1 && !contents[counter]->hasOccupant())
+		{
+			retVal[counter] = true;
+		}
+		else
+		{
+			retVal[counter] = false;
+		}
+	}
+	delete stepMap;
+	return retVal;
+}
+
+bool* FEBattleField::getValidAttackPositions(FEUnit* unitToMove)
+{
+	bool* standingPlaces = getValidFinalPositions(unitToMove);
+	bool* strikeMap = new bool[size];
+	for(int counter = 0; counter < size; counter++)
+	{
+		strikeMap[counter] = false;
+	}
+	for(int counter = 0; counter < size; counter++)
+	{
+		if(standingPlaces[counter])
+		{
+			for(int counte = 0; counte < size; counte++)
+			{
+				if(counter != counte &&
+					getDistance(counter % width, counter / width, counte % width, counte / width) <= unitToMove->getRange())
+				{
+					strikeMap[counte] = true;
+				}
+			}
+		}
+	}
+	for(int counter = 0; counter < size; counter++)
+	{
+		if(contents[counter]->hasOccupant() &&
+			(static_cast<FEUnit*>(contents[counter]->getOccupant())->getTeam() == 0 ||
+			static_cast<FEUnit*>(contents[counter]->getOccupant())->getTeam() ==  unitToMove->getTeam()))
+		{
+			strikeMap[counter] = false;
+		}
+	}
+	delete standingPlaces;
+	return strikeMap;
 }
