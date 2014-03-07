@@ -1,8 +1,8 @@
 #include "StdAfx.h"
-#include "stopWatch.h"
+#include "StopWatch.h"
 
 
-stopWatch::stopWatch(void)
+StopWatch::StopWatch(void)
 {
 	LARGE_INTEGER performanceFrequency;
 	QueryPerformanceFrequency(&performanceFrequency);
@@ -10,16 +10,16 @@ stopWatch::stopWatch(void)
 }
 
 
-stopWatch::~stopWatch(void)
+StopWatch::~StopWatch(void)
 {
 }
 
-void stopWatch::startCounting(void)
+void StopWatch::startCounting(void)
 {
 	QueryPerformanceCounter(&startTime);
 }
 
-LARGE_INTEGER stopWatch::checkCount(void)
+LARGE_INTEGER StopWatch::checkCount(void)
 {
 	QueryPerformanceCounter(&currentTime);
 	LARGE_INTEGER temp;

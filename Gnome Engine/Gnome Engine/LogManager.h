@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "stopWatch.h"
+#include "StopWatch.h"
 
 using namespace std;
 

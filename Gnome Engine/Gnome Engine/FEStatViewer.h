@@ -3,13 +3,15 @@
 #include "FEUnit.h"
 
 /*
-Na:$$$$$$$$
-Hp:$$______
-Mi:$$Ac:$$$
-De:$$Av:$$$
-Mo:$$Ra:$$_
-width: 11
-Height: 5
+Na:$$$$$$$$$
+Hp:$$/$$____
+St:$$_Ma:$$_
+De:$$_Re:$$_
+Sk:$$_Sp:$$_
+Lk:$$_Cr:$$_
+Ac:$$$Av:$$$
+width: 12
+Height: 7
 */
 
 class FEStatViewer :	public Map

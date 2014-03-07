@@ -60,11 +60,11 @@ ColorChar FEBattleField::getColorChar(int x, int y)
 		else
 		{
 			//blue field can be moved to
-			if(!contents[y * width + x]->hasOccupant() && getDistance(activeUnit->getMyX(), activeUnit->getMyY(), x, y) <= activeUnit->getMove())
+			if(!contents[y * width + x]->hasOccupant() && getDistance(activeUnit->getMyX(), activeUnit->getMyY(), x, y) <= activeUnit->getStats().move)
 			{
 				retVal.color = (retVal.color % 8) + 24; //cyan background
 			}
-			else if(getDistance(activeUnit->getMyX(), activeUnit->getMyY(), x, y) <= activeUnit->getMove() + activeUnit->getRange() &&
+			else if(getDistance(activeUnit->getMyX(), activeUnit->getMyY(), x, y) <= activeUnit->getStats().move + activeUnit->getRange() &&
 				(!contents[x + y * width]->hasOccupant() || static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != activeUnit->getTeam()))
 			{
 				retVal.color = (retVal.color % 8) + 40; //angry background
@@ -76,7 +76,7 @@ ColorChar FEBattleField::getColorChar(int x, int y)
 
 bool FEBattleField::enter(Creature* newCreature, int x, int y)
 {
-	//TODO: check that newCreature is an FE creature, somehow
+	//TODO: check that newCreature is a FE creature, somehow
 /*	if(typeid (newCreature) != typeid(FEUnit*)) //extensions should be allowed; I'll have to rewrite this check
 	{
 		return false;
@@ -163,7 +163,7 @@ void FEBattleField::takeInput(char in) //finish this function
 				//try to attack the unit at the indicated location
 				if(canAttack(activeUnit, cursorX, cursorY))
 				{
-					activeUnit->attack(static_cast<FEUnit*>(contents[cursorX + cursorY * width]->getOccupant()));
+					activeUnit->attack(static_cast<FEUnit*>(contents[cursorX + cursorY * width]->getOccupant()), false);
 					finishMoving();
 				}
 			}
@@ -204,7 +204,7 @@ void FEBattleField::step()
 		}
 		if(thisOrder.attackTarget != nullptr && canAttack(activeUnit, thisOrder.attackTarget->getMyX(), thisOrder.attackTarget->getMyY()))
 		{
-			activeUnit->attack(thisOrder.attackTarget);
+			activeUnit->attack(thisOrder.attackTarget, false);
 		}
 		finishMoving();
 	}
@@ -253,7 +253,7 @@ void FEBattleField::finishMoving()
 
 inline bool FEBattleField::canMove(FEUnit* movingUnit, int x, int y)
 {
-	return getDistance(movingUnit->getMyX(), movingUnit->getMyY(), x, y) <= movingUnit->getMove();
+	return getDistance(movingUnit->getMyX(), movingUnit->getMyY(), x, y) <= movingUnit->getStats().move;
 }
 
 inline bool FEBattleField::canAttack(FEUnit* attackingUnit, int x, int y)
@@ -287,7 +287,7 @@ int FEBattleField::InitTerrain(int map[], int x, int y)
 		for (int j = 0; j < y; j++) {
 			if (map[i*y+j] == 1) {
 				terrainObjects[i][j] = map[i*y+j];
-				this->enter(new FEUnit('X', 4, 1, 0, 0, 0, 0, 0, 0, 0, "Rock   "), i, j);
+//				this->enter(new FEUnit('X', 2, 2, new StatBlock(), 0, ITEM, 0, 0, "Rock"), i, j);
 			}
 		}
 	}

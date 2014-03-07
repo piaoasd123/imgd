@@ -21,6 +21,6 @@ private:
 	LogManager* log;
 	MapManager* map;
 	GraphicsManager* graph;
-	stopWatch timer;
+	StopWatch timer;
 };
 

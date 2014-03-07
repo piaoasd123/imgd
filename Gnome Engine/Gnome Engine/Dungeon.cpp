@@ -12,28 +12,28 @@ Dungeon::Dungeon(int height, int width)
 	this->width = width;
 	size = height * width;
 	contents = new Cell*[size];
-	for(int counter = 0; counter < height; counter++)
+	for(int i = 0; i < height; i++)
 	{
-		for(int counte = 0; counte < width; counte++)
+		for(int j = 0; j < width; j++)
 		{
-			contents[counter * width + counte] = new Cell(this, counte, counter);
+			contents[i * width + j] = new Cell(this, j, i);
 		}
 	}
 	
 	//link up all the new cells
-	for(int counter = 0; counter < height; counter++)
+	for(int i = 0; i < height; i++)
 	{
-		for(int counte = 0; counte < width; counte++)
+		for(int j = 0; j < width; j++)
 		{
-			for(int count = -1; count <= 1; count++)
+			for(int k = -1; k <= 1; k++)
 			{
-				for(int coun = -1; coun <= 1; coun++)
+				for(int l = -1; l <= 1; l++)
 				{
-					if((counter + count >= 0) && (counter + count < height) &&
-						(counte + coun >= 0) && (counte + coun < width))
+					if((i + k >= 0) && (i + k < height) &&
+						(j + l >= 0) && (j + l < width))
 					{
-						contents[counter * width + counte]->
-							makeCellAdjecent(contents[(counter + count) * width + counte + counte]);
+						contents[i * width + j]->
+							makeCellAdjecent(contents[(i + k) * width + j + l]);
 					}
 				}
 			}

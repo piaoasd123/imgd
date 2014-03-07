@@ -1,5 +1,5 @@
 #pragma once
-#include "feaiinterface.h"
+#include "FEaiinterface.h"
 class SampleFEAI :	public FEAIInterface
 {
 public:

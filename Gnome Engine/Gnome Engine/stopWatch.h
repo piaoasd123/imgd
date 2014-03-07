@@ -2,11 +2,11 @@
 
 #include <Windows.h>
 
-class stopWatch
+class StopWatch
 {
 public:
-	stopWatch(void);
-	~stopWatch(void);
+	StopWatch(void);
+	~StopWatch(void);
 	void startCounting(void);
 	LARGE_INTEGER checkCount(void); //returns answer in milliseconds
 

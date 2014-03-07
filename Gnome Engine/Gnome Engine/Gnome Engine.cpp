@@ -6,7 +6,7 @@
 
 #ifdef GNOME
 
-#include "stopWatch.h"
+#include "StopWatch.h"
 #include "LogManager.h"
 #include "GraphicsManager.h"
 #include "CycleManager.h"
@@ -15,20 +15,16 @@
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	//initialize clock
-	//load log manager
+	//Get manager instances
 	LogManager* log = LogManager::getInstance();
-	log->startUp();
-	//load assets
-	//load graphics manager
 	GraphicsManager* graph = GraphicsManager::getInstance();
-	graph->startUp();
-	//initialize map(s)
 	MapManager* map = MapManager::getInstance();
-	map->startUp();
-	//begin game cycle
 	CycleManager* cycle = CycleManager::getInstance();
-	cycle->startUp();
+	//Initialize managers
+	log->startUp();
+	graph->startUp();
+	map->startUp();
+	cycle->startUp();	
 	//load and initialize game; this is the only line that changes when the game is switched out
 	Game* thisGame = new GAMENAME();
 	thisGame->initialize();

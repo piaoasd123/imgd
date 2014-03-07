@@ -23,7 +23,7 @@ void CycleManager::startUp(void)
 	map = MapManager::getInstance();
 	graph = GraphicsManager::getInstance();
 	isRunning = false;
-	timer = stopWatch();
+	timer = StopWatch();
 	log->writeLog("CycleManager: Started Up");
 }
 
