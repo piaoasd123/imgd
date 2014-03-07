@@ -136,7 +136,7 @@ void FEBattleField::exit(int x, int y)
 
 void FEBattleField::takeInput(char in) //finish this function
 {
-	if(moveCounter > 8 && factionAIs[currentTurn] == nullptr)
+	if(moveCounter > 4 && factionAIs[currentTurn] == nullptr)
 	{
 		moveCounter = 0;
 		//if there's a num key, move the cursor
@@ -188,7 +188,7 @@ void FEBattleField::takeInput(char in) //finish this function
 				if(canAttack(activeUnit, cursorX, cursorY))
 				{
 					activeUnit->attack(static_cast<FEUnit*>(contents[cursorX + cursorY * width]->getOccupant()),
-						canAttack(static_cast<FEUnit*>(contents[cursorX + cursorY * width]->getOccupant()),
+						!canAttack(static_cast<FEUnit*>(contents[cursorX + cursorY * width]->getOccupant()), //why does counter = false mean no counterattack?
 						activeUnit->getMyX(),
 						activeUnit->getMyY()));
 					finishMoving();
@@ -212,6 +212,7 @@ void FEBattleField::takeInput(char in) //finish this function
 			{
 				finishMoving();
 			}
+			activeUnit = nullptr; //deselect
 		}
 	}
 }
@@ -397,6 +398,7 @@ bool* FEBattleField::getValidFinalPositions(FEUnit* unitToMove)
 			retVal[counter] = false;
 		}
 	}
+	retVal[unitToMove->getMyX() + unitToMove->getMyY() * width] = true;
 	delete stepMap;
 	return retVal;
 }

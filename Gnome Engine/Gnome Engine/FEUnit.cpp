@@ -1,123 +1,3 @@
-/*#include "StdAfx.h"
-#include "FEUnit.h"
-#include <stdlib.h>
-
-
-FEUnit::FEUnit(char face, int skin, int team, int speed, int range, int might, int defense, int accuracy, int avoid, int hp, string name) : Creature(face, skin)
-{
-	player = team;
-	move = speed;
-	this->range = range;
-	this->might = might;
-	this->defense = defense;
-	this->accuracy = accuracy;
-	this->avoid = avoid;
-	maxHp = hp;
-	currentHp = hp;
-	this->name = name;
-}
-
-
-FEUnit::~FEUnit(void)
-{
-}
-
-void FEUnit::attack(FEUnit* enemy)
-{
-	//assume range is checked elsewhere
-	if(enemy->defense >= might)
-		return; //attack has no effect
-	if(enemy->avoid >= accuracy)
-		return; //never hit
-	//roll to hit
-	int toHitRoll = (rand() % 100) + (rand() % 100); //using dynamic hit
-	if(toHitRoll <= (accuracy - enemy->avoid) * 2)
-	{
-		//hit
-		enemy->currentHp -= (might - enemy->defense);
-		if(enemy->currentHp <= 0)
-		{
-			//kill the enemy
-			delete enemy;
-		}
-	}
-}
-
-int FEUnit::getTeam()
-{
-	return player;
-}
-
-bool FEUnit::getIsActive()
-{
-	return isActive;
-}
-
-ColorChar FEUnit::getColorChar()
-{
-	ColorChar retVal = Creature::getColorChar();
-	if(!isActive)
-	{
-		retVal.color = 0; //black when inactive
-	}
-	return retVal;
-}
-
-void FEUnit::activate()
-{
-	isActive = true;
-}
-
-void FEUnit::deactivate()
-{
-	isActive = false;
-}
-
-int FEUnit::getMove()
-{
-	return move;
-}
-
-int FEUnit::getRange()
-{
-	return range;
-}
-
-string FEUnit::getName()
-{
-	return name;
-}
-
-int FEUnit::getHp()
-{
-	return currentHp;
-}
-
-int FEUnit::getMight()
-{
-	return might;
-}
-
-int FEUnit::getDefense()
-{
-	return defense;
-}
-
-int FEUnit::getAccuracy()
-{
-	return accuracy;
-}
-
-int FEUnit::getAvoid()
-{
-	return avoid;
-}
-
-int FEUnit::getMaxHp()
-{
-	return maxHp;
-}*/
-
 #include "StdAfx.h"
 #include "FEUnit.h"
 #include <stdlib.h>
@@ -131,6 +11,7 @@ FEUnit::FEUnit(char _face, int _skin, int _team, StatBlock* _stats, int _range, 
 	weapon_accuracy = _weapon_accuracy;
 	weapon_crit = _weapon_crit;
 	name = _name;
+	currentHP = stats->max_hp;
 }
 
 
@@ -328,13 +209,18 @@ int FEUnit::getBaseCritChance()
 
 bool FEUnit::modifyHP(int change)
 {
-	stats->current_hp += change;
-	if(stats->current_hp >= stats->max_hp) stats->current_hp = stats->max_hp;
-	if(stats->current_hp <= 0) return true;
+	currentHP += change;
+	if(currentHP >= stats->max_hp) currentHP = stats->max_hp;
+	if(currentHP <= 0) return true;
 	else return false;
 }
 
 int FEUnit::getMove()
 {
 	return stats->move;
+}
+
+int FEUnit::getCurrentHP()
+{
+	return currentHP;
 }
