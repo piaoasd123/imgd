@@ -3,13 +3,14 @@
 #include "FEUnit.h"
 #include "FEStatViewer.h"
 #include "FEAIInterface.h"
+#include "FEConsole.h"
 
 class FEAIInterface;
 
 class FEBattleField :	public Dungeon
 {
 public:
-	FEBattleField(int numberOfPlayers, int height, int width, FEStatViewer* statWindow);
+	FEBattleField(int numberOfPlayers, int height, int width, FEStatViewer* statWindow, FEConsole* log);
 	~FEBattleField(void);
 	void step();
 	void takeInput(char in);
@@ -43,4 +44,5 @@ private:
 	bool canMove(FEUnit* movingUnit, int x, int y);
 	bool canAttack(FEUnit* attackingUnit, int x, int y);
 	bool canAttackSpace(FEUnit* attackingUnit, int x, int y);
+	FEConsole* attacklog;
 };

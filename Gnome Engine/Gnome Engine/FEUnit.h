@@ -2,6 +2,7 @@
 #include "creature.h"
 #include <string>
 #include <vector>
+#include "FEConsole.h"
 
 using namespace std;
 
@@ -66,7 +67,7 @@ class FEUnit :	public Creature
 public:
 	FEUnit(char _face, int _skin, int _team, StatBlock* _stats, int _range, WEAPON_TYPE _weapon_type, int _weapon_accuracy, int _weapon_crit, string _name);
 	~FEUnit(void);
-	bool attack(FEUnit* enemy, bool counter);
+	bool attack(FEUnit* enemy, bool counter, FEConsole* log);
 	virtual ColorChar getColorChar();
 	int getTeam();
 	bool getIsActive();

@@ -16,7 +16,19 @@ FEMoveOrder SampleFEAI::getNextMove(FEBattleField* currentBattleField, LinkedLis
 	FEMoveOrder retVal;
 	LinkedList<FEUnit>* PlayerUnits = currentBattleField->getPlayerUnits();
 	retVal.unitToMove = unitsToMove->getFirst()->first;
-	FEUnit* target = currentBattleField->getPlayerUnits()->getFirst()->first;
+	FEUnit* target;
+	if(currentBattleField->getPlayerUnits()->getFirst() != nullptr)
+	{
+		target = currentBattleField->getPlayerUnits()->getFirst()->first;
+	}
+	else
+	{
+		//they're all dead
+		retVal.endX = retVal.unitToMove->getMyX();
+		retVal.endY = retVal.unitToMove->getMyY();
+		retVal.attackTarget = nullptr;
+		return retVal;
+	}
 	bool* spotsToMove = currentBattleField->getValidFinalPositions(retVal.unitToMove);
 	bool* spotsToStrike = currentBattleField->getValidAttackPositions(retVal.unitToMove);
 	if(spotsToStrike[target->getMyX() + target->getMyY() * currentBattleField->getMyX()])

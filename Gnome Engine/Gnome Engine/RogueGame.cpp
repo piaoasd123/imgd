@@ -22,7 +22,8 @@ void RogueGame::initialize(void)
 	MapManager* mapmgr = MapManager::getInstance();
 	GraphicsManager* graph = GraphicsManager::getInstance();
 	FEStatViewer* sampleStatViewer = new FEStatViewer();
-	FEBattleField* sampleBattleField = new FEBattleField(2, 20, 10, sampleStatViewer);
+	FEConsole* sampleConsole = new FEConsole(30, 10);
+	FEBattleField* sampleBattleField = new FEBattleField(2, 20, 10, sampleStatViewer, sampleConsole);
 	int map[200] = {0, 0, 1, 1, 1, 1, 1, 1, 0, 0,
 					0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					0, 1, 1, 0, 0, 0, 0, 1, 1, 0,
@@ -67,6 +68,8 @@ void RogueGame::initialize(void)
 	graph->insert(cam);
 	Camera* cam2 = new Camera(sampleStatViewer, 12, 0, 0, 0, 12, 8);
 	graph->insert(cam2);
+	Camera* cam3 = new Camera(sampleConsole, 12, 8, 0, 0, 30, 10);
+	graph->insert(cam3);
 	mapmgr->activateMap(sampleBattleField);
 	mapmgr->registerForInput(sampleBattleField);
 }

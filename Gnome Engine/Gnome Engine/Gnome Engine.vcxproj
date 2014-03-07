@@ -129,6 +129,7 @@
     <ClInclude Include="Dungeon.h" />
     <ClInclude Include="FEAIInterface.h" />
     <ClInclude Include="FEBattleField.h" />
+    <ClInclude Include="FEConsole.h" />
     <ClInclude Include="FEStatViewer.h" />
     <ClInclude Include="FEUnit.h" />
     <ClInclude Include="Game.h" />
@@ -166,6 +167,7 @@
     <ClCompile Include="Dungeon.cpp" />
     <ClCompile Include="FEAIInterface.cpp" />
     <ClCompile Include="FEBattleField.cpp" />
+    <ClCompile Include="FEConsole.cpp" />
     <ClCompile Include="FEStatViewer.cpp" />
     <ClCompile Include="FEUnit.cpp" />
     <ClCompile Include="Game.cpp" />

@@ -5,7 +5,7 @@
 
 using namespace std;
 
-FEBattleField::FEBattleField(int numberOfPlayers, int height, int width, FEStatViewer* statViewer) : Dungeon(height, width)
+FEBattleField::FEBattleField(int numberOfPlayers, int height, int width, FEStatViewer* statViewer, FEConsole* log) : Dungeon(height, width)
 {
 	activeUnit = nullptr;
 	cursorX = 0;
@@ -28,6 +28,7 @@ FEBattleField::FEBattleField(int numberOfPlayers, int height, int width, FEStatV
 	terrainObjects = new int*[width];
 	for (int i = 0; i < width; i++)
 		terrainObjects[i] = new int[height];
+	attacklog = log;
 }
 
 
@@ -190,7 +191,7 @@ void FEBattleField::takeInput(char in) //finish this function
 					activeUnit->attack(static_cast<FEUnit*>(contents[cursorX + cursorY * width]->getOccupant()),
 						!canAttack(static_cast<FEUnit*>(contents[cursorX + cursorY * width]->getOccupant()), //why does counter = false mean no counterattack?
 						activeUnit->getMyX(),
-						activeUnit->getMyY()));
+						activeUnit->getMyY()), attacklog);
 					finishMoving();
 				}
 			}
@@ -232,7 +233,7 @@ void FEBattleField::step()
 		}
 		if(thisOrder.attackTarget != nullptr && canAttack(activeUnit, thisOrder.attackTarget->getMyX(), thisOrder.attackTarget->getMyY()))
 		{
-			activeUnit->attack(thisOrder.attackTarget, canAttack(thisOrder.attackTarget, thisOrder.unitToMove->getMyX(), thisOrder.unitToMove->getMyY()));
+			activeUnit->attack(thisOrder.attackTarget, canAttack(thisOrder.attackTarget, thisOrder.unitToMove->getMyX(), thisOrder.unitToMove->getMyY()), attacklog);
 		}
 		finishMoving();
 		moveCounter = 0;

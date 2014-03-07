@@ -19,7 +19,7 @@ FEUnit::~FEUnit(void)
 {
 }
 
-bool FEUnit::attack(FEUnit* enemy, bool counter)
+bool FEUnit::attack(FEUnit* enemy, bool counter, FEConsole* log)
 {
 	//assume range is checked elsewhere
 	int enemy_dr = enemy->getDamageReduction(weapon_type);
@@ -27,11 +27,13 @@ bool FEUnit::attack(FEUnit* enemy, bool counter)
 	int base_damage = getBaseDamage();
 	int base_accuracy = getBaseAccuracy();
 	bool enemy_killed = false;
-	if(enemy_dr >= base_damage)
+	string logMessage;
+	/*if(enemy_dr >= base_damage)
 		return enemy_killed; //attack has no effect
 	if(enemy_avoid >= base_accuracy)
-		return enemy_killed; //never hit
+		return enemy_killed; //never hit*/
 	//roll to hit
+	log->sendMessage(name + " attacks " + enemy->getName());
 	int toHitRoll =  ( (rand() % 100) + (rand() % 100) ) / 2; //using dynamic hit
 	if(toHitRoll <= (base_accuracy - enemy_avoid))
 	{
@@ -39,25 +41,40 @@ bool FEUnit::attack(FEUnit* enemy, bool counter)
 		int total_damage = base_damage - enemy_dr;
 		int crit_chance = getBaseCritChance() - enemy->getStats().luck;
 		if( ( rand() % 100) <= crit_chance ) total_damage *= 2;
+		log->sendMessage("Hit!");
 		enemy_killed = enemy->modifyHP(-total_damage);
-		if(enemy_killed) delete enemy;
+		if(enemy_killed)
+		{
+			log->sendMessage(enemy->getName() + " is slain!");
+			delete enemy;
+		}
 		else
 		{
 			bool killed_by_counter = false;
-			if (!counter) killed_by_counter = enemy->attack(this, true);
+			if (!counter) killed_by_counter = enemy->attack(this, true, log);
 			if(!killed_by_counter && stats->speed >= enemy->getStats().speed + 4) //double attack for high speed
 			{
+				log->sendMessage(name + " strikes again!");
 				toHitRoll = ( (rand() % 100) + (rand() % 100) ) / 2; //using dynamic hit
 				if(toHitRoll <= (base_accuracy - enemy_avoid))
 				{
 					int total_damage = base_damage - enemy_dr;
 					int crit_chance = getBaseCritChance() - enemy->getStats().luck;
 					if( ( rand() % 100) <= crit_chance ) total_damage *= 2;
+					log->sendMessage("Hit!");
 					bool enemy_killed = enemy->modifyHP(-total_damage);
-					if(enemy_killed) delete enemy;
+					if(enemy_killed)
+					{
+						log->sendMessage(enemy->getName() + " is slain!");
+						delete enemy;
+					}
 				}
 			}
 		}
+	}
+	else
+	{
+		log->sendMessage("Miss!");
 	}
 	return enemy_killed;
 }
