@@ -84,7 +84,8 @@ ColorChar FEBattleField::getColorChar(int x, int y)
 		else
 		{
 			//blue field can be moved to
-			if(!contents[y * width + x]->hasOccupant() && getDistance(activeUnit->getMyX(), activeUnit->getMyY(), x, y) <= activeUnit->getMove())
+			//if(!contents[y * width + x]->hasOccupant() && getDistance(activeUnit->getMyX(), activeUnit->getMyY(), x, y) <= activeUnit->getMove())
+			if(canMove(activeUnit, x, y))
 			{
 				retVal.color = (retVal.color % 8) + 24; //cyan background
 			}
@@ -284,7 +285,10 @@ void FEBattleField::finishMoving()
 
 inline bool FEBattleField::canMove(FEUnit* movingUnit, int x, int y)
 {
-	return getDistance(movingUnit->getMyX(), movingUnit->getMyY(), x, y) <= movingUnit->getMove();
+	bool* inefficient = getValidFinalPositions(activeUnit);
+	bool retVal = inefficient[x + y * width];
+	delete inefficient;
+	return retVal;
 }
 
 inline bool FEBattleField::canAttack(FEUnit* attackingUnit, int x, int y)
@@ -297,10 +301,10 @@ inline bool FEBattleField::canAttack(FEUnit* attackingUnit, int x, int y)
 
 inline bool FEBattleField::canAttackSpace(FEUnit* attackingUnit, int x, int y)
 {
-	return getDistance(attackingUnit->getMyX(), attackingUnit->getMyY(), x, y) <= attackingUnit->getRange() + attackingUnit->getMove() &&
-	(!contents[x + y * width]->hasOccupant() ||
-	(static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != attackingUnit->getTeam() &&
-	static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getTeam() != 0));
+	bool* inefficient = getValidAttackPositions(activeUnit);
+	bool retVal = inefficient[x + y * width];
+	delete inefficient;
+	return retVal;
 }
 
 void FEBattleField::setAI(FEAIInterface* newAI, int faction)
@@ -335,40 +339,98 @@ int FEBattleField::InitTerrain(int map[], int x, int y)
 	}
 }
 
-/*bool* FEBattleField::getValidFinalPositions(FEUnit* unitToMove)
+bool* FEBattleField::getValidFinalPositions(FEUnit* unitToMove)
 {
-	int* stepMap = new int[height * width]; //false = can't move, true = can
-	for(int counter = 0; counter < height * width; counter++)
+	int* stepMap = new int[size];
+	for(int counter = 0; counter < size; counter++)
 	{
-
+		stepMap[counter] = -1;
 	}
-}*/
-
-/*
-vector<Position> TileGrid::getValidMoves(Unit* move_unit){
-  vector<Position> move_list; //vector that will contain all valid move end positions
-  move_list.push_back(move_unit->getPosition()); //staying put is always a valid move
-  getMoves(move_unit, move_unit->getPosition(),move_unit->getMove(),&move_list); //recursively build list of valid moves
-  return move_list;
+	stepMap[unitToMove->getMyX() + unitToMove->getMyY() * width] = 0;
+	for(int counter = 0; counter < unitToMove->getMove(); counter++)
+	{
+		for(int counte = 0; counte < size; counte++)
+		{
+			if(stepMap[counte] == counter) //take a step
+			{
+				//up
+				if(counte >= width && stepMap[counte - width] == -1 &&
+					(!contents[counte - width]->hasOccupant() ||
+					static_cast<FEUnit*>(contents[counte - width]->getOccupant())->getTeam() == unitToMove->getTeam()))
+				{
+					stepMap[counte - width] = counter + 1;
+				}
+				//down
+				if(counte < width * (height - 1) && stepMap[counte + width] == -1 &&
+					(!contents[counte + width]->hasOccupant() ||
+					static_cast<FEUnit*>(contents[counte + width]->getOccupant())->getTeam() == unitToMove->getTeam()))
+				{
+					stepMap[counte + width] = counter + 1;
+				}
+				//left
+				if(counte % width > 0 && stepMap[counte - 1] == -1 &&
+					(!contents[counte - 1]->hasOccupant() ||
+					static_cast<FEUnit*>(contents[counte - 1]->getOccupant())->getTeam() == unitToMove->getTeam()))
+				{
+					stepMap[counte - 1] = counter + 1;
+				}
+				//right
+				if(counte % width > 0 && stepMap[counte + 1] == -1 &&
+					(!contents[counte + 1]->hasOccupant() ||
+					static_cast<FEUnit*>(contents[counte + 1]->getOccupant())->getTeam() == unitToMove->getTeam()))
+				{
+					stepMap[counte + 1] = counter + 1;
+				}
+			}
+		}
+	}
+	bool* retVal = new bool[size];
+	for(int counter = 0; counter < size; counter++)
+	{
+		if(stepMap[counter] != -1 && !contents[counter]->hasOccupant())
+		{
+			retVal[counter] = true;
+		}
+		else
+		{
+			retVal[counter] = false;
+		}
+	}
+	delete stepMap;
+	return retVal;
 }
 
-void TileGrid::getMoves(Unit* move_unit,Position from_pos, int move_remaining,vector<Position>* move_list){
-  int x = from_pos.getX();
-  int y = from_pos.getY();
-  addMove(move_unit,Position(x-1,y),move_remaining,move_list); //left adjacent
-  addMove(move_unit,Position(x+1,y),move_remaining,move_list); //right adjacent
-  addMove(move_unit,Position(x,y-1),move_remaining,move_list); //top adjacent
-  addMove(move_unit,Position(x,y+1),move_remaining,move_list); //bottom adjacent
+bool* FEBattleField::getValidAttackPositions(FEUnit* unitToMove)
+{
+	bool* standingPlaces = getValidFinalPositions(unitToMove);
+	bool* strikeMap = new bool[size];
+	for(int counter = 0; counter < size; counter++)
+	{
+		strikeMap[counter] = false;
+	}
+	for(int counter = 0; counter < size; counter++)
+	{
+		if(standingPlaces[counter])
+		{
+			for(int counte = 0; counte < size; counte++)
+			{
+				if(counter != counte &&
+					getDistance(counter % width, counter / width, counte % width, counte / width) <= unitToMove->getRange())
+				{
+					strikeMap[counte] = true;
+				}
+			}
+		}
+	}
+	for(int counter = 0; counter < size; counter++)
+	{
+		if(contents[counter]->hasOccupant() &&
+			(static_cast<FEUnit*>(contents[counter]->getOccupant())->getTeam() == 0 ||
+			static_cast<FEUnit*>(contents[counter]->getOccupant())->getTeam() ==  unitToMove->getTeam()))
+		{
+			strikeMap[counter] = false;
+		}
+	}
+	delete standingPlaces;
+	return strikeMap;
 }
-
-void TileGrid::addMove(Unit* move_unit,Position to_pos,int move_remaining,vector<Position>* move_list){
-  int x = to_pos.getX();
-  int y = to_pos.getY();
-  if(x<0 || y<0 || x>=columns || y>=rows) return; //coordinate is out of bounds
-  int cost = tiles[x][y]->moveCost(move_unit);
-  if(cost<=move_remaining){
-    move_list->push_back(to_pos);
-    if(move_remaining-cost>0) getMoves(move_unit,to_pos,move_remaining - cost, move_list);
-  }
-}
-*/
