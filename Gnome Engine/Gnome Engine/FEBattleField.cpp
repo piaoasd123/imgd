@@ -39,6 +39,7 @@ FEBattleField::~FEBattleField(void)
 		delete factionAIs;
 	}
 	delete unitCounts;
+	delete terrainObjects;
 }
 
 ColorChar FEBattleField::getColorChar(int x, int y)
@@ -185,7 +186,10 @@ void FEBattleField::takeInput(char in) //finish this function
 				//try to attack the unit at the indicated location
 				if(canAttack(activeUnit, cursorX, cursorY))
 				{
-					activeUnit->attack(static_cast<FEUnit*>(contents[cursorX + cursorY * width]->getOccupant()));
+					activeUnit->attack(static_cast<FEUnit*>(contents[cursorX + cursorY * width]->getOccupant()),
+						canAttack(static_cast<FEUnit*>(contents[cursorX + cursorY * width]->getOccupant()),
+						activeUnit->getMyX(),
+						activeUnit->getMyY()));
 					finishMoving();
 				}
 			}
@@ -226,7 +230,7 @@ void FEBattleField::step()
 		}
 		if(thisOrder.attackTarget != nullptr && canAttack(activeUnit, thisOrder.attackTarget->getMyX(), thisOrder.attackTarget->getMyY()))
 		{
-			activeUnit->attack(thisOrder.attackTarget);
+			activeUnit->attack(thisOrder.attackTarget, canAttack(thisOrder.attackTarget, thisOrder.unitToMove->getMyX(), thisOrder.unitToMove->getMyY()));
 		}
 		finishMoving();
 	}
@@ -316,6 +320,7 @@ LinkedList<FEUnit>* FEBattleField::getAIUnits()
 
 int FEBattleField::InitTerrain(int map[], int x, int y)
 {
+	StatBlock* standard_rock = new StatBlock(10, 0, 0, 0, 0, 0, 0, 0, 0, Proficiency());
 	if (x != width || y != height)
 		return -1;
 	else {
@@ -323,8 +328,47 @@ int FEBattleField::InitTerrain(int map[], int x, int y)
 		for (int j = 0; j < y; j++) {
 			if (map[i*y+j] == 1) {
 				terrainObjects[i][j] = map[i*y+j];
-				this->enter(new FEUnit('@', 0, 0, 0, 0, 0, 0, 0, 0, 0, "Rock    "), i, j);
+				this->enter(new FEUnit('@', 0, 0, standard_rock, 0, SWORD, 0, 0, "Rock    "), i, j);
 			}
 		}
+		return 0; //success
 	}
 }
+
+/*bool* FEBattleField::getValidFinalPositions(FEUnit* unitToMove)
+{
+	int* stepMap = new int[height * width]; //false = can't move, true = can
+	for(int counter = 0; counter < height * width; counter++)
+	{
+
+	}
+}*/
+
+/*
+vector<Position> TileGrid::getValidMoves(Unit* move_unit){
+  vector<Position> move_list; //vector that will contain all valid move end positions
+  move_list.push_back(move_unit->getPosition()); //staying put is always a valid move
+  getMoves(move_unit, move_unit->getPosition(),move_unit->getMove(),&move_list); //recursively build list of valid moves
+  return move_list;
+}
+
+void TileGrid::getMoves(Unit* move_unit,Position from_pos, int move_remaining,vector<Position>* move_list){
+  int x = from_pos.getX();
+  int y = from_pos.getY();
+  addMove(move_unit,Position(x-1,y),move_remaining,move_list); //left adjacent
+  addMove(move_unit,Position(x+1,y),move_remaining,move_list); //right adjacent
+  addMove(move_unit,Position(x,y-1),move_remaining,move_list); //top adjacent
+  addMove(move_unit,Position(x,y+1),move_remaining,move_list); //bottom adjacent
+}
+
+void TileGrid::addMove(Unit* move_unit,Position to_pos,int move_remaining,vector<Position>* move_list){
+  int x = to_pos.getX();
+  int y = to_pos.getY();
+  if(x<0 || y<0 || x>=columns || y>=rows) return; //coordinate is out of bounds
+  int cost = tiles[x][y]->moveCost(move_unit);
+  if(cost<=move_remaining){
+    move_list->push_back(to_pos);
+    if(move_remaining-cost>0) getMoves(move_unit,to_pos,move_remaining - cost, move_list);
+  }
+}
+*/
