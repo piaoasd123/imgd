@@ -33,14 +33,16 @@ void RogueGame::initialize(void)
 	sampleBattleField->InitTerrain(map, 7, 7);
 	//sampleBattleField->setAI(new SampleFEAI(), 2);
 
-	StatBlock* standard_knight = new StatBlock(20, 15, 0, 8, 5, 7, 5, 5, 4, Proficiency());
-	StatBlock* standard_archer = new StatBlock(15, 13, 0, 5, 6, 8, 9, 5, 5, Proficiency());
+	StatBlock* lancelot_stats = new StatBlock(20, 15, 0, 8, 5, 7, 5, 5, 4, Proficiency());
+	StatBlock* galahad_stats = new StatBlock(20, 15, 0, 8, 5, 7, 5, 5, 4, Proficiency());
+	StatBlock* william_stats = new StatBlock(15, 13, 0, 5, 6, 8, 9, 5, 5, Proficiency());
+	StatBlock* robin_stats = new StatBlock(15, 13, 0, 5, 6, 8, 9, 5, 5, Proficiency());
 
-	FEUnit* lancelot = new FEUnit('K', 4, 1, standard_knight, 1, SWORD, 90, 5, "Lancelot");
-	FEUnit* william = new FEUnit('A', 4, 1, standard_archer, 2, BOW, 80, 5, "William");
+	FEUnit* lancelot = new FEUnit('K', 4, 1, lancelot_stats, 1, SWORD, 90, 5, "Lancelot");
+	FEUnit* william = new FEUnit('A', 4, 1, william_stats, 2, BOW, 80, 5, "William");
 
-	FEUnit* galahad = new FEUnit('K', 1, 2, standard_knight, 1, SWORD, 90, 5, "Galahad");
-	FEUnit* robin = new FEUnit('A', 1, 2, standard_archer, 2, BOW, 80, 5, "Robin");
+	FEUnit* galahad = new FEUnit('K', 1, 2, galahad_stats, 1, SWORD, 90, 5, "Galahad");
+	FEUnit* robin = new FEUnit('A', 1, 2, robin_stats, 2, BOW, 80, 5, "Robin");
 
 	sampleBattleField->enter(lancelot, 2, 2);
 	sampleBattleField->enter(william, 2, 4);
