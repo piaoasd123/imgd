@@ -310,14 +310,9 @@ void FEBattleField::setAI(FEAIInterface* newAI, int faction)
 	factionAIs[faction] = newAI;
 }
 
-LinkedList<FEUnit>* FEBattleField::getPlayerUnits()
+LinkedList<FEUnit>* FEBattleField::getPlayerUnits(int player)
 {
-	return unitCounts[1]->copyList();
-}
-
-LinkedList<FEUnit>* FEBattleField::getAIUnits()
-{
-	return unitCounts[2]->copyList();
+	return unitCounts[player]->copyList();
 }
 
 int FEBattleField::InitTerrain(int map[], int x, int y)
