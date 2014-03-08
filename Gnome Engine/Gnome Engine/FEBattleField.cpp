@@ -228,7 +228,7 @@ void FEBattleField::step()
 		}
 		if(thisOrder.attackTarget != nullptr && canAttack(activeUnit, thisOrder.attackTarget->getMyX(), thisOrder.attackTarget->getMyY()))
 		{
-			activeUnit->attack(thisOrder.attackTarget, canAttack(thisOrder.attackTarget, thisOrder.unitToMove->getMyX(), thisOrder.unitToMove->getMyY()), attacklog);
+			activeUnit->attack(thisOrder.attackTarget, !canAttack(thisOrder.attackTarget, thisOrder.unitToMove->getMyX(), thisOrder.unitToMove->getMyY()), attacklog);
 		}
 		finishMoving();
 		moveCounter = 0;
@@ -305,9 +305,9 @@ inline bool FEBattleField::canAttackSpace(FEUnit* attackingUnit, int x, int y)
 	return retVal;
 }
 
-void FEBattleField::setAI(FEAIInterface* newAI, int faction)
+int FEBattleField::getNumPlayers()
 {
-	factionAIs[faction] = newAI;
+	return numPlayers;
 }
 
 LinkedList<FEUnit>* FEBattleField::getPlayerUnits(int player)
@@ -394,15 +394,6 @@ bool* FEBattleField::getValidFinalPositions(FEUnit* unitToMove)
 	delete stepMap;
 	return retVal;
 }
-/*
-bool* FEBattleField::getValidFinalPositions(FEUnit* unitToMove)
-{
-	int* stepMap = new int[size];
-	for (int counter = 0; counter < size; counter++)
-	{
-		stepMap[counter] = -1;
-	}
-}*/
 
 bool* FEBattleField::getValidAttackPositions(FEUnit* unitToMove)
 {
@@ -451,4 +442,30 @@ FEBattleField* FEBattleField::clone()
 		}
 	}
 	return retVal;
+}
+
+LinkedList<FEUnit>* FEBattleField::getPossibleAttackTargets(int x, int y, int player, Item* weapon)
+{
+	LinkedList<FEUnit>* retVal = new LinkedList<FEUnit>();
+	for(int counter = 0; counter < height; counter++) //y
+	{
+		for(int counte = 0; counte < width; counte++) //x
+		{
+			int dis = abs(x - counte) + abs(y - counter);
+			if(dis >= weapon->min_range && dis <= weapon->max_range && contents[counter * width + x]->hasOccupant())
+			{
+				FEUnit* temp = static_cast<FEUnit*>(contents[counter * width + x]->getOccupant());
+				if(temp->getPlayer() != 0 && temp->getPlayer() != player)
+				{
+					retVal->insert(temp);
+				}
+			}
+		}
+	}
+	return retVal;
+}
+
+void FEBattleField::setAI(FEAIInterface* newAI, int faction)
+{
+	factionAIs[faction] = newAI;
 }

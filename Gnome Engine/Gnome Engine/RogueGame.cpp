@@ -8,6 +8,7 @@
 #include "NumWalker.h"
 #include "RandomWalker.h"
 #include "SampleFEAI.h"
+#include "GeneticAI.h"
 RogueGame::RogueGame(void)
 {
 }
@@ -44,7 +45,6 @@ void RogueGame::initialize(void)
 					1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
 					1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
 					1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-	sampleBattleField->setAI(new SampleFEAI(), 2);
 
 	Item* armingSword = new Item(SWORD, 0, 4, 90, 5, 1, 1);
 	Item* recurveBow = new Item(BOW, 0, 7, 80, 10, 2, 2);
@@ -66,6 +66,16 @@ void RogueGame::initialize(void)
 	FEUnit* galahad = new FEUnit('S', 4, 1, swashbuckler_stats, cutlass, "Galahad");
 	FEUnit* bedevere = new FEUnit('F', 4, 1, fighter_stats, battleAxe, "Bedevere");
 	FEUnit* merlin = new FEUnit('W', 4, 1, mage_stats, fireTome, "Merlin");
+
+	StatBlock** statSheet = new StatBlock*[6];
+	statSheet[0] = knight_stats;
+	statSheet[1] = archer_stats;
+	statSheet[2] = cavalier_stats;
+	statSheet[3] = swashbuckler_stats;
+	statSheet[4] = fighter_stats;
+	statSheet[5] = mage_stats;
+
+	sampleBattleField->setAI(new GeneticAI(statSheet, 6), 2);
 
 	Cell** leftPatrol = new Cell*[5];
 	leftPatrol[0] = sampleBattleField->getCell(3, 15);

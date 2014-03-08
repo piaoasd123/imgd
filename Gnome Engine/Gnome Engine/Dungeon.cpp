@@ -118,3 +118,8 @@ int Dungeon::getMyX() {
 int Dungeon::getMyY() {
 	return height;
 }
+
+int Dungeon::getMySize()
+{
+	return size;
+}
