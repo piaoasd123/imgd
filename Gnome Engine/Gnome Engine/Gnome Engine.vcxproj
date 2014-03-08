@@ -119,6 +119,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\PD Curses\curses.h" />
     <ClInclude Include="..\..\PD Curses\panel.h" />
+    <ClInclude Include="AIBreeder.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Cell.h" />
@@ -161,6 +162,7 @@
     <ClInclude Include="TestMap.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AIBreeder.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Cell.cpp" />
