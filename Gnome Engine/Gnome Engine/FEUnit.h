@@ -86,8 +86,9 @@ public:
 	int getCurrentHP();
 	void setPatrolState(int _state);
 	int getPatrolState();
-	void setPatrolPath(Cell** _patrolPath);
+	void setPatrolPath(Cell** _patrolPath, int _patrolPoints);
 	Cell** getPatrolPath();
+	int getPatrolPoints();
 
 	void giveItem(Item* _item);
 	Pile* getInventory();
@@ -108,6 +109,7 @@ private:
 	string name; //like "Sir Fred" or whatever this individual guy is called
 
 	int patrolState;
+	int patrolPoints;
 	Cell** patrolPath;
 	
 //friend class FEBattleField;

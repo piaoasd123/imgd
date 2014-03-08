@@ -439,6 +439,25 @@ bool* FEBattleField::getValidAttackPositions(FEUnit* unitToMove)
 	return strikeMap;
 }
 
+Cell** FEBattleField::getValidEnemiesToAttack(bool* attackPositions)
+{
+	Cell** validPlayerUnits = new Cell*[size];
+	for (int counter = 0; counter < size; counter++)
+	{
+		validPlayerUnits[counter] = nullptr;
+	}
+
+	for (int counter = 0; counter < size; counter++)
+	{
+		Cell* temp = this->getCell(counter % width, counter / width);
+		//If unit is a player unit
+		if (4 == temp->getOccupant()->getColorChar().color) {
+			validPlayerUnits[counter] = temp;
+		}
+	}
+	return validPlayerUnits;
+}
+
 FEBattleField* FEBattleField::clone()
 {
 	FEBattleField* retVal = new FEBattleField(numPlayers, height, width, nullptr, nullptr);

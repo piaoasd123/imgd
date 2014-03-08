@@ -14,12 +14,12 @@ SampleFEAI::~SampleFEAI(void)
 FEMoveOrder SampleFEAI::getNextMove(FEBattleField* currentBattleField, LinkedList<FEUnit>* unitsToMove)
 {
 	FEMoveOrder retVal;
-	LinkedList<FEUnit>* PlayerUnits = currentBattleField->getPlayerUnits();
+	LinkedList<FEUnit>* PlayerUnits = currentBattleField->getPlayerUnits(0);
 	retVal.unitToMove = unitsToMove->getFirst()->first;
 	FEUnit* target;
-	if(currentBattleField->getPlayerUnits()->getFirst() != nullptr)
+	if(currentBattleField->getPlayerUnits(0)->getFirst() != nullptr)
 	{
-		target = currentBattleField->getPlayerUnits()->getFirst()->first;
+		target = currentBattleField->getPlayerUnits(0)->getFirst()->first;
 	}
 	else
 	{

@@ -269,11 +269,16 @@ void FEUnit::setPatrolState(int _state) {
 int FEUnit::getPatrolState() {
 	return patrolState;
 }
-void FEUnit::setPatrolPath(Cell** _patrolPath) {
+void FEUnit::setPatrolPath(Cell** _patrolPath, int _patrolPoints) {
 	patrolPath = _patrolPath;
 	patrolState = 0;
+	patrolPoints = _patrolPoints - 1;
 }
 
 Cell** FEUnit::getPatrolPath() {
 	return patrolPath;
+}
+
+int FEUnit::getPatrolPoints() {
+	return patrolPoints;
 }

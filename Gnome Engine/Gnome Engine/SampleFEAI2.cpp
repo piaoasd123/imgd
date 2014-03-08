@@ -14,13 +14,28 @@ SampleFEAI2::~SampleFEAI2(void)
 FEMoveOrder SampleFEAI2::getNextMove(FEBattleField* currentBattleField, LinkedList<FEUnit>* unitsToMove)
 {
 	FEMoveOrder retVal;
-	LinkedList<FEUnit>* PlayerUnits = currentBattleField->getPlayerUnits();
+	LinkedList<FEUnit>* PlayerUnits = currentBattleField->getPlayerUnits(0);
 	retVal.unitToMove = unitsToMove->getFirst()->first;
 	FEUnit* target;
 	bool* spotsToMove = currentBattleField->getValidFinalPositions(retVal.unitToMove);
 	bool* spotsToStrike = currentBattleField->getValidAttackPositions(retVal.unitToMove);
 
+	/*Find Enemy units within strikemap*/
+
+	
+
+
+
+
+
+
+
 	if (retVal.unitToMove->getPatrolState() != -1) {
+		//If unit reaches point of return, reset patrol state.
+		if (retVal.unitToMove->getPatrolPoints() == retVal.unitToMove->getPatrolState()) {
+			retVal.unitToMove->setPatrolState(0);
+		}
+
 		Cell* nextMove = retVal.unitToMove->getPatrolPath()[retVal.unitToMove->getPatrolState() + 1];
 		if (spotsToMove[nextMove->getMyX() + nextMove->getMyY() * currentBattleField->getMyX()]) {
 			retVal.unitToMove->setPatrolState(retVal.unitToMove->getPatrolState() + 1);
@@ -31,9 +46,9 @@ FEMoveOrder SampleFEAI2::getNextMove(FEBattleField* currentBattleField, LinkedLi
 	}
 	 
 	else {
-		if (currentBattleField->getPlayerUnits()->getFirst() != nullptr)
+		if (currentBattleField->getPlayerUnits(0)->getFirst() != nullptr)
 		{
-			target = currentBattleField->getPlayerUnits()->getFirst()->first;
+			target = currentBattleField->getPlayerUnits(0)->getFirst()->first;
 		}
 		else
 		{

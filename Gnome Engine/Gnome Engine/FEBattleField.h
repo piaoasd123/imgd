@@ -18,11 +18,12 @@ public:
 	bool enter(Creature* newCreature, int x, int y);
 	void exit(int x, int y);
 	void setAI(FEAIInterface* newAI, int faction);
-	LinkedList<FEUnit>* FEBattleField::getPlayerUnits();
-	LinkedList<FEUnit>* FEBattleField::getAIUnits();
+	LinkedList<FEUnit>* FEBattleField::getPlayerUnits(int player);
+	LinkedList<FEUnit>* FEBattleField::getAIUnits(int player);
 	int InitTerrain(int map[], int x, int y);
 	bool* getValidFinalPositions(FEUnit* unitToMove);
 	bool* getValidAttackPositions(FEUnit* unitToMove);
+	Cell** getValidEnemiesToAttack(bool* attackPositions);
 	FEBattleField* clone();//makes a duplicate of this battlefield with new units and all; probably not worth using but you guys want it
 private:
 	FEUnit* activeUnit; //this unit is selected

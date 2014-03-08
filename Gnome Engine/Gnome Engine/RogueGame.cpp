@@ -72,19 +72,19 @@ void RogueGame::initialize(void)
 	leftPatrol[0] = sampleBattleField->getCell(3, 15);
 	leftPatrol[1] = sampleBattleField->getCell(1, 15);
 	leftPatrol[2] = sampleBattleField->getCell(1, 12);
-	leftPatrol[4] = sampleBattleField->getCell(1, 15);
-	leftPatrol[5] = leftPatrol[0];
+	leftPatrol[3] = sampleBattleField->getCell(1, 15);
+	leftPatrol[4] = leftPatrol[0];
 	Cell** rightPatrol = new Cell*[5];
 	rightPatrol[0] = sampleBattleField->getCell(6, 15);
 	rightPatrol[1] = sampleBattleField->getCell(8, 15);
 	rightPatrol[2] = sampleBattleField->getCell(8, 12);
-	rightPatrol[4] = sampleBattleField->getCell(8, 15);
-	rightPatrol[5] = rightPatrol[0];
+	rightPatrol[3] = sampleBattleField->getCell(8, 15);
+	rightPatrol[4] = rightPatrol[0];
 
 	FEUnit* black = new FEUnit('K', 1, 2, knight_stats, armingSword, "Black Knight");//Left patrol
-	black->setPatrolPath(leftPatrol);
+	black->setPatrolPath(leftPatrol, 5);
 	FEUnit* denise = new FEUnit('S', 1, 2, swashbuckler_stats, cutlass, "Denise");//Right patrol
-	denise->setPatrolPath(rightPatrol);
+	denise->setPatrolPath(rightPatrol, 5);
 
 
 	FEUnit* herbert = new FEUnit('A', 1, 2, archer_stats, recurveBow, "Herbert");
