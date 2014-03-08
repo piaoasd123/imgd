@@ -84,6 +84,10 @@ public:
 	int getAccuracy(); //given skill, luck, and weapon accuracy
 	int getCritChance(); //given skill and weapon
 	int getCurrentHP();
+	void setPatrolState(int _state);
+	int getPatrolState();
+	void setPatrolPath(Cell** _patrolPath);
+	Cell** getPatrolPath();
 
 	void giveItem(Item* _item);
 	Pile* getInventory();
@@ -102,6 +106,9 @@ private:
 	bool isActive; //if this unit has moved yet this turn; true means it can still move
 	int player; //the number of the player who owns this unit
 	string name; //like "Sir Fred" or whatever this individual guy is called
+
+	int patrolState;
+	Cell** patrolPath;
 	
 //friend class FEBattleField;
 };

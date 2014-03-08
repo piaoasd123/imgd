@@ -9,6 +9,7 @@ FEUnit::FEUnit(char _glyph, int _color, int _player, StatBlock* _stats, Item* _w
 	weapon = _weapon;
 	name = _name;
 	currentHP = stats->max_hp;
+	patrolState = -1;
 }
 
 
@@ -259,4 +260,20 @@ FEUnit* FEUnit::clone()
 	retVal->isActive = isActive;
 	retVal->currentHP = currentHP;
 	return retVal;
+}
+
+void FEUnit::setPatrolState(int _state) {
+	patrolState = _state;
+}
+
+int FEUnit::getPatrolState() {
+	return patrolState;
+}
+void FEUnit::setPatrolPath(Cell** _patrolPath) {
+	patrolPath = _patrolPath;
+	patrolState = 0;
+}
+
+Cell** FEUnit::getPatrolPath() {
+	return patrolPath;
 }

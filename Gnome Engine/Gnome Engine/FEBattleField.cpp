@@ -399,6 +399,15 @@ bool* FEBattleField::getValidFinalPositions(FEUnit* unitToMove)
 	delete stepMap;
 	return retVal;
 }
+/*
+bool* FEBattleField::getValidFinalPositions(FEUnit* unitToMove)
+{
+	int* stepMap = new int[size];
+	for (int counter = 0; counter < size; counter++)
+	{
+		stepMap[counter] = -1;
+	}
+}*/
 
 bool* FEBattleField::getValidAttackPositions(FEUnit* unitToMove)
 {

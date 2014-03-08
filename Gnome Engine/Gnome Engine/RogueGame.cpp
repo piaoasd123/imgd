@@ -4,10 +4,11 @@
 #include "Camera.h"
 #include "MapManager.h"
 #include "FEBattleField.h"
+#include "FEEnemyUnit.h"
 #include "NumWalker.h"
 #include "RandomWalker.h"
+#include "SampleFEAI2.h"
 #include "SampleFEAI.h"
-
 RogueGame::RogueGame(void)
 {
 }
@@ -44,7 +45,7 @@ void RogueGame::initialize(void)
 					1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
 					1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
 					1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-	sampleBattleField->setAI(new SampleFEAI(), 2);
+	sampleBattleField->setAI(new SampleFEAI2(), 2);
 
 	Item* armingSword = new Item(SWORD, 0, 4, 90, 5, 1, 1);
 	Item* recurveBow = new Item(BOW, 0, 7, 80, 10, 2, 2);
@@ -67,10 +68,27 @@ void RogueGame::initialize(void)
 	FEUnit* bedevere = new FEUnit('F', 4, 1, fighter_stats, battleAxe, "Bedevere");
 	FEUnit* merlin = new FEUnit('W', 4, 1, mage_stats, fireTome, "Merlin");
 
-	FEUnit* black = new FEUnit('K', 1, 2, knight_stats, armingSword, "Black Knight");
+	Cell** leftPatrol = new Cell*[5];
+	leftPatrol[0] = sampleBattleField->getCell(3, 15);
+	leftPatrol[1] = sampleBattleField->getCell(1, 15);
+	leftPatrol[2] = sampleBattleField->getCell(1, 12);
+	leftPatrol[4] = sampleBattleField->getCell(1, 15);
+	leftPatrol[5] = leftPatrol[0];
+	Cell** rightPatrol = new Cell*[5];
+	rightPatrol[0] = sampleBattleField->getCell(6, 15);
+	rightPatrol[1] = sampleBattleField->getCell(8, 15);
+	rightPatrol[2] = sampleBattleField->getCell(8, 12);
+	rightPatrol[4] = sampleBattleField->getCell(8, 15);
+	rightPatrol[5] = rightPatrol[0];
+
+	FEUnit* black = new FEUnit('K', 1, 2, knight_stats, armingSword, "Black Knight");//Left patrol
+	black->setPatrolPath(leftPatrol);
+	FEUnit* denise = new FEUnit('S', 1, 2, swashbuckler_stats, cutlass, "Denise");//Right patrol
+	denise->setPatrolPath(rightPatrol);
+
+
 	FEUnit* herbert = new FEUnit('A', 1, 2, archer_stats, recurveBow, "Herbert");
 	FEUnit* frenchman = new FEUnit('C', 1, 2, cavalier_stats, impailer, "Frenchman");
-	FEUnit* denise = new FEUnit('S', 1, 2, swashbuckler_stats, cutlass, "Denise");
 	FEUnit* giant = new FEUnit('F', 1, 2, fighter_stats, battleAxe, "Giant");
 	FEUnit* tim = new FEUnit('W', 1, 2, mage_stats, fireTome, "Tim");
 
