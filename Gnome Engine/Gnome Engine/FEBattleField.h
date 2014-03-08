@@ -45,4 +45,6 @@ private:
 	bool canAttack(FEUnit* attackingUnit, int x, int y);
 	bool canAttackSpace(FEUnit* attackingUnit, int x, int y);
 	FEConsole* attacklog;
+	int turnCounter;
+	void endMatch(); //this will be used to reset the map for the next round
 };

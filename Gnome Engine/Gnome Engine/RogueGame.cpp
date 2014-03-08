@@ -49,7 +49,7 @@ void RogueGame::initialize(void)
 	Item* armingSword = new Item(SWORD, 0, 4, 90, 5, 1, 1);
 	Item* recurveBow = new Item(BOW, 0, 7, 80, 10, 2, 2);
 	Item* impailer = new Item(LANCE, 0, 8, 90, 10, 1, 1);
-	Item* cutlass = new Item(SWORD, 0, 4, 100, 3, 1, 1);
+	Item* cutlass = new Item(SWORD, 0, 6, 100, 30, 1, 1);
 	Item* battleAxe = new Item(AXE, 0, 8, 80, 15, 1, 1);
 	Item* fireTome = new Item(ANIMA, 0, 5, 90, 5, 1, 2);
 

@@ -2,6 +2,7 @@
 #include "FEBattleField.h"
 #include <algorithm> 
 #include "SampleFEAI.h"
+#include <sstream>
 
 using namespace std;
 
@@ -26,6 +27,8 @@ FEBattleField::FEBattleField(int numberOfPlayers, int height, int width, FEStatV
 	statWindow = statViewer;
 	unitsToMove = new LinkedList<FEUnit>();
 	attacklog = log;
+	turnCounter = 1;
+	log->sendMessage("Player 1: Turn 1");
 }
 
 
@@ -34,8 +37,8 @@ FEBattleField::~FEBattleField(void)
 	for(int counter = 0; counter < numPlayers; counter++)
 	{
 		delete unitCounts[counter];
-		delete factionAIs;
 	}
+	delete factionAIs;
 	delete unitCounts;
 }
 
@@ -250,16 +253,6 @@ void FEBattleField::finishMoving()
 	attackMode = false;
 	activeUnit = nullptr;
 	//check if there are any activeUnits left of the current team
-	/*bool anyUnitsLeft = false;
-	forEach(FEUnit, counter, unitCounts[currentTurn]->getFirst())
-	{
-		if(counter->first->getIsActive())
-		{
-			anyUnitsLeft = true;
-			break;
-		}
-	}
-	if(!anyUnitsLeft) //no units left to move so advance the turn*/
 	if(unitsToMove->getFirst() == nullptr)
 	{
 		//make all inactive units active
@@ -267,17 +260,27 @@ void FEBattleField::finishMoving()
 		{
 			counter->first->activate();
 		}
+		int lastTurn = currentTurn;
 		do
 		{
 			currentTurn = (currentTurn + 1) % numPlayers;
 			if(currentTurn == 0) //zero is reserved for rocks
 			{
 				currentTurn++;
+				turnCounter++;
 			}
 		}
 		while(unitCounts[currentTurn]->getFirst() == nullptr); //skip the turns of anyone with no units
 		delete unitsToMove;
+		if(lastTurn == currentTurn || currentTurn > 30)
+		{
+			//gameover
+			endMatch();
+		}
 		unitsToMove = unitCounts[currentTurn]->copyList();
+		stringstream ss;
+		ss << "Player " << currentTurn << ": Turn " << turnCounter;
+		attacklog->sendMessage(ss.str());
 	}
 }
 
@@ -468,4 +471,69 @@ LinkedList<FEUnit>* FEBattleField::getPossibleAttackTargets(int x, int y, int pl
 void FEBattleField::setAI(FEAIInterface* newAI, int faction)
 {
 	factionAIs[faction] = newAI;
+}
+
+void FEBattleField::endMatch()
+{
+	//declare winner
+	//if only one survior, that one wins
+	int lastManStanding = 0;
+	for(int counter = 1; counter < numPlayers; counter++)
+	{
+		if(unitCounts[counter]->getFirst() != nullptr)
+		{
+			if(lastManStanding == 0) //first survivor
+			{
+				lastManStanding = counter;
+			}
+			else //tie
+			{
+				lastManStanding = -1;
+				break;
+			}
+
+		}
+		if(lastManStanding > 0) //there was a winner
+		{
+			stringstream ss;
+			ss << "Player " << lastManStanding << " is victorious!";
+			attacklog->sendMessage(ss.str());
+		}
+		else
+		{
+			stringstream ss;
+			ss << "Timout: Draw!";
+			attacklog->sendMessage(ss.str());
+		}
+		//score players
+		int* scores = new int[numPlayers];
+		for(int counter = 1; counter <  numPlayers; counter++)
+		{
+			scores[counter] = 0;
+			if(lastManStanding == counter)
+			{
+				scores[counter] += 10;
+			}
+			for(int counte = 1; counte <  numPlayers; counte++)
+			{
+				if(counter != counte)
+				{
+					//6 is a fair baseline, but it should be the max number of units if possible
+					scores[counter] += 6;
+					forEach(FEUnit, count, getPlayerUnits(counte)->getFirst())
+					{
+						scores[counter] -= 1;
+					}
+				}
+				else
+				{
+					forEach(FEUnit, count, getPlayerUnits(counte)->getFirst())
+					{
+						scores[counter] += 1;
+					}
+				}
+			}
+		}
+		//do something with the scores
+	}
 }
