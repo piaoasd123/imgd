@@ -7,7 +7,6 @@
 #include "FEEnemyUnit.h"
 #include "NumWalker.h"
 #include "RandomWalker.h"
-#include "SampleFEAI2.h"
 #include "SampleFEAI.h"
 RogueGame::RogueGame(void)
 {
@@ -45,7 +44,7 @@ void RogueGame::initialize(void)
 					1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
 					1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
 					1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-	sampleBattleField->setAI(new SampleFEAI2(), 2);
+	sampleBattleField->setAI(new SampleFEAI(), 2);
 
 	Item* armingSword = new Item(SWORD, 0, 4, 90, 5, 1, 1);
 	Item* recurveBow = new Item(BOW, 0, 7, 80, 10, 2, 2);

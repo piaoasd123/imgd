@@ -18,7 +18,7 @@ public:
 	bool enter(Creature* newCreature, int x, int y);
 	void exit(int x, int y);
 	void setAI(FEAIInterface* newAI, int faction);
-	LinkedList<FEUnit>* FEBattleField::getPlayerUnits();
+	LinkedList<FEUnit>* FEBattleField::getPlayerUnits(int player);
 	LinkedList<FEUnit>* FEBattleField::getAIUnits();
 	int InitTerrain(int map[], int x, int y);
 	bool* getValidFinalPositions(FEUnit* unitToMove);
