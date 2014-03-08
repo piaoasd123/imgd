@@ -20,11 +20,14 @@ public:
 	void setAI(FEAIInterface* newAI, int faction);
 	LinkedList<FEUnit>* FEBattleField::getPlayerUnits(int player);
 	LinkedList<FEUnit>* FEBattleField::getAIUnits(int player);
+	int FEBattleField::getNumPlayers();
 	int InitTerrain(int map[], int x, int y);
 	bool* getValidFinalPositions(FEUnit* unitToMove);
 	bool* getValidAttackPositions(FEUnit* unitToMove);
 	Cell** getValidEnemiesToAttack(bool* attackPositions);
 	FEBattleField* clone();//makes a duplicate of this battlefield with new units and all; probably not worth using but you guys want it
+	static int getDistance(int startX, int startY, int endX, int endY);
+	LinkedList<FEUnit>* getPossibleAttackTargets(int x, int y, int player, Item* weapon);
 private:
 	FEUnit* activeUnit; //this unit is selected
 	int cursorX;
@@ -35,7 +38,6 @@ private:
 	int numPlayers;
 	//int unitsOnField;
 	LinkedList<FEUnit>** unitCounts; //for determining when the game is over
-	int getDistance(int startX, int startY, int endX, int endY);
 	bool attackMode; //true when done moving but about to attack
 	void finishMoving(); //to be called when a unit becomes inactive
 	FEStatViewer* statWindow;
@@ -45,4 +47,6 @@ private:
 	bool canAttack(FEUnit* attackingUnit, int x, int y);
 	bool canAttackSpace(FEUnit* attackingUnit, int x, int y);
 	FEConsole* attacklog;
+	int turnCounter;
+	void endMatch(); //this will be used to reset the map for the next round
 };

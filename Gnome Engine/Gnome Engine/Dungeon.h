@@ -25,6 +25,7 @@ public:
 	Cell** getCells();
 	int getMyX();
 	int getMyY();
+	int getMySize();
 protected:
 	//lets assume all dungeons are on orthogonal grids
 	int height;
