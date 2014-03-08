@@ -25,9 +25,9 @@ bool FEUnit::attack(FEUnit* enemy, bool counter, FEConsole* log)
 	int base_accuracy = getAccuracy();
 	bool enemy_killed = false;
 	string logMessage;
-	/*if(enemy_dr >= base_damage)
+	if(enemy_dr >= base_damage)
 		return enemy_killed; //attack has no effect
-	if(enemy_avoid >= base_accuracy)
+	/*if(enemy_avoid >= base_accuracy)
 		return enemy_killed; //never hit*/
 	//roll to hit
 	log->sendMessage(name + " attacks " + enemy->getName());
