@@ -6,6 +6,7 @@
 #include "FEConsole.h"
 
 class FEAIInterface;
+class AIBreeder;
 
 class FEBattleField :	public Dungeon
 {
@@ -19,7 +20,6 @@ public:
 	void exit(int x, int y);
 	void setAI(FEAIInterface* newAI, int faction);
 	LinkedList<FEUnit>* FEBattleField::getPlayerUnits(int player);
-	LinkedList<FEUnit>* FEBattleField::getAIUnits(int player);
 	int FEBattleField::getNumPlayers();
 	int InitTerrain(int map[], int x, int y);
 	bool* getValidFinalPositions(FEUnit* unitToMove);
@@ -28,6 +28,8 @@ public:
 	FEBattleField* clone();//makes a duplicate of this battlefield with new units and all; probably not worth using but you guys want it
 	static int getDistance(int startX, int startY, int endX, int endY);
 	LinkedList<FEUnit>* getPossibleAttackTargets(int x, int y, int player, Item* weapon);
+	void killAllUnits(); //leaves rocks in place
+	void uUFightToTheDeath(AIBreeder* scoreWanter); //fights a battle returns an array of the scores of the teams
 private:
 	FEUnit* activeUnit; //this unit is selected
 	int cursorX;
@@ -49,4 +51,5 @@ private:
 	FEConsole* attacklog;
 	int turnCounter;
 	void endMatch(); //this will be used to reset the map for the next round
+	AIBreeder* scoreKeeper;
 };

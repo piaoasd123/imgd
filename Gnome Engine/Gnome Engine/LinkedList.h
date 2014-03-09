@@ -19,6 +19,7 @@ public:
 	void remove(Content* obj);
 	Link<Content>* getFirst();
 	void freeAll(void); //make sure all objects in list were newed!
+	void stripList(void); //alternate version of freeAll
 	LinkedList<Content>* copyList(); //creates a duplicate list pointing to all the same items
 private:
 	Link<Content>* first;
@@ -42,7 +43,6 @@ template<class Content> LinkedList<Content>::~LinkedList(void)
 			ptr = last;
 		}
 	}
-	delete first;
 }
 
 template<class Content> void LinkedList<Content>::insert(Content* obj)
@@ -71,14 +71,30 @@ template<class Content> void LinkedList<Content>::remove(Content* obj)
 	}
 }
 
+//the destructors of Content shouldn't remove it from the list this is called on and therefore must not be called from anywhere but
+//this function
 template<class Content> void LinkedList<Content>::freeAll(void)
 {
 	Link<Content>* last;
 	for(Link<Content>* ptr = first; ptr != nullptr; ptr)
 	{
-		delete ptr->first;
 		last = ptr->next;
+		delete ptr->first;
 		delete ptr;
+		ptr = last;
+	}
+	first = nullptr;
+}
+
+//this is like freeAll, but it leaves the list structure in place, counting on the object's destructor to clean it; use this if Content's
+//destructor is called from elsewhere and will clean up this list this is called on
+template<class Content> void LinkedList<Content>::stripList(void)
+{
+	Link<Content>* last;
+	for(Link<Content>* ptr = first; ptr != nullptr; ptr)
+	{
+		last = ptr->next;
+		delete ptr->first;
 		ptr = last;
 	}
 	first = nullptr;

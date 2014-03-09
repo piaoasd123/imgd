@@ -74,7 +74,7 @@ bool FEUnit::attack(FEUnit* enemy, bool counter, FEConsole* log)
 					{
 						log->sendMessage("Hit!");
 					}
-					bool enemy_killed = enemy->modifyHP(-total_damage);
+					enemy_killed = enemy->modifyHP(-total_damage);
 					if(enemy_killed)
 					{
 						log->sendMessage(enemy->getName() + " is slain!");

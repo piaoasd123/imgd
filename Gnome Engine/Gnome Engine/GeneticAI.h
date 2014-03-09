@@ -1,5 +1,5 @@
 #pragma once
-#include "feaiinterface.h"
+#include "FEAIInterface.h"
 #include <cstdlib>
 
 class GeneticAI :	public FEAIInterface

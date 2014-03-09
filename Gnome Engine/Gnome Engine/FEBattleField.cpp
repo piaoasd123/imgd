@@ -3,6 +3,7 @@
 #include <algorithm> 
 #include "SampleFEAI.h"
 #include <sstream>
+#include "AIBreeder.h"
 
 using namespace std;
 
@@ -29,6 +30,7 @@ FEBattleField::FEBattleField(int numberOfPlayers, int height, int width, FEStatV
 	attacklog = log;
 	turnCounter = 1;
 	log->sendMessage("Player 1: Turn 1");
+	scoreKeeper = nullptr;
 }
 
 
@@ -220,7 +222,7 @@ void FEBattleField::step()
 {
 	flashCounter = (flashCounter + 1) % 15;
 	moveCounter++;
-	if(moveCounter >= 24 && factionAIs[currentTurn] != nullptr)
+	if(/*moveCounter >= 24 &&*/ factionAIs[currentTurn] != nullptr) //put the moveCounter back in for actual human play
 	{
 		FEMoveOrder thisOrder = factionAIs[currentTurn]->getNextMove(this, unitsToMove);
 		//execute the order
@@ -229,7 +231,7 @@ void FEBattleField::step()
 		{
 			activeUnit->getMyLocation()->tryToMoveToCell(contents[thisOrder.endX + thisOrder.endY * width], false);
 		}
-		if(thisOrder.attackTarget != nullptr && canAttack(activeUnit, thisOrder.attackTarget->getMyX(), thisOrder.attackTarget->getMyY()))
+		if(activeUnit != nullptr && thisOrder.attackTarget != nullptr && canAttack(activeUnit, thisOrder.attackTarget->getMyX(), thisOrder.attackTarget->getMyY()))
 		{
 			activeUnit->attack(thisOrder.attackTarget, !canAttack(thisOrder.attackTarget, thisOrder.unitToMove->getMyX(), thisOrder.unitToMove->getMyY()), attacklog);
 		}
@@ -271,12 +273,12 @@ void FEBattleField::finishMoving()
 			}
 		}
 		while(unitCounts[currentTurn]->getFirst() == nullptr); //skip the turns of anyone with no units
-		delete unitsToMove;
-		if(lastTurn == currentTurn || currentTurn > 30)
+		if(lastTurn == currentTurn || turnCounter > 30)
 		{
 			//gameover
 			endMatch();
 		}
+		delete unitsToMove;
 		unitsToMove = unitCounts[currentTurn]->copyList();
 		stringstream ss;
 		ss << "Player " << currentTurn << ": Turn " << turnCounter;
@@ -286,7 +288,7 @@ void FEBattleField::finishMoving()
 
 inline bool FEBattleField::canMove(FEUnit* movingUnit, int x, int y)
 {
-	bool* inefficient = getValidFinalPositions(activeUnit);
+	bool* inefficient = getValidFinalPositions(movingUnit);
 	bool retVal = inefficient[x + y * width];
 	delete inefficient;
 	return retVal;
@@ -554,5 +556,24 @@ void FEBattleField::endMatch()
 			}
 		}
 		//do something with the scores
+		if(scoreKeeper != nullptr)
+		{
+			scoreKeeper->takeScores(scores);
+		}
 	}
+}
+
+void FEBattleField::killAllUnits()
+{
+	for(int counter = 1; counter < numPlayers; counter++)
+	{
+		unitCounts[counter]->stripList();
+	}
+}
+
+void FEBattleField::uUFightToTheDeath(AIBreeder* scoreWanter)
+{
+	scoreKeeper = scoreWanter;
+	turnCounter = 1;
+	attacklog->sendMessage("Player 1: Turn 1");
 }

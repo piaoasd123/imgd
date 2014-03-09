@@ -9,10 +9,11 @@
 #include "RandomWalker.h"
 #include "SampleFEAI.h"
 #include "GeneticAI.h"
+#include "AIBreeder.h"
+
 RogueGame::RogueGame(void)
 {
 }
-
 
 RogueGame::~RogueGame(void)
 {
@@ -75,7 +76,24 @@ void RogueGame::initialize(void)
 	statSheet[4] = fighter_stats;
 	statSheet[5] = mage_stats;
 
-	sampleBattleField->setAI(new GeneticAI(statSheet, 6), 2);
+	//sampleBattleField->setAI(new GeneticAI(statSheet, 6), 2);
+	LinkedList<spawnPoint>* spawns = new LinkedList<spawnPoint>();
+	spawns->insert(new spawnPoint(3, 7, 'K', 4, 1, knight_stats, armingSword, "Lancelot"));
+	spawns->insert(new spawnPoint(4, 7, 'A', 4, 1, archer_stats, recurveBow, "Robin"));
+	spawns->insert(new spawnPoint(5, 7, 'C', 4, 1, cavalier_stats, impailer, "Arthur"));
+	spawns->insert(new spawnPoint(6, 7, 'S', 4, 1, swashbuckler_stats, cutlass, "Galahad"));
+	spawns->insert(new spawnPoint(4, 6, 'F', 4, 1, fighter_stats, battleAxe, "Bedevere"));
+	spawns->insert(new spawnPoint(5, 6, 'W', 4, 1, mage_stats, fireTome, "Merlin"));
+
+	spawns->insert(new spawnPoint(3, 15, 'K', 1, 2, knight_stats, armingSword, "Black Knight"));
+	spawns->insert(new spawnPoint(4, 15, 'A', 1, 2, archer_stats, recurveBow, "Denise"));
+	spawns->insert(new spawnPoint(5, 15, 'C', 1, 2, cavalier_stats, impailer, "Frenchman"));
+	spawns->insert(new spawnPoint(6, 15, 'S', 1, 2, swashbuckler_stats, cutlass, "Herbert"));
+	spawns->insert(new spawnPoint(4, 14, 'F', 1, 2, fighter_stats, battleAxe, "Giant"));
+	spawns->insert(new spawnPoint(5, 14, 'W', 1, 2, mage_stats, fireTome, "Tim"));
+
+	AIBreeder* sampleBreeder = new AIBreeder(4, statSheet, 6, sampleBattleField, spawns);
+	sampleBreeder->breedGenerations(2);
 
 	Cell** leftPatrol = new Cell*[5];
 	leftPatrol[0] = sampleBattleField->getCell(3, 15);
@@ -125,4 +143,5 @@ void RogueGame::initialize(void)
 	graph->insert(cam3);
 	mapmgr->activateMap(sampleBattleField);
 	mapmgr->registerForInput(sampleBattleField);
+
 }

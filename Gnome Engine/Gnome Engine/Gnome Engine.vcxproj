@@ -24,7 +24,6 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ConnectXPlayer|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -55,8 +54,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
-    <LibraryPath>C:\Users\piaoa_000\Documents\GitHub\imgd\Gnome Engine\PD Curses;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\Users\piaoa_000\Documents\GitHub\imgd\Gnome Engine\Gnome Engine;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Ian\Documents\GitHub\imgd\Gnome Engine\PD Curses;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Ian\Documents\GitHub\imgd\Gnome Engine\Gnome Engine;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ConnectXPlayer|Win32'">
     <LinkIncremental>true</LinkIncremental>
