@@ -1,5 +1,7 @@
 #include "StdAfx.h"
 #include "AIBreeder.h"
+#include "LogManager.h"
+#include <sstream>
 
 AIBreeder::AIBreeder(int _stockSize, StatBlock** _idStats, int _numBlocks, FEBattleField* _arena, LinkedList<spawnPoint>* _spawnPoints)
 {
@@ -20,6 +22,7 @@ AIBreeder::AIBreeder(int _stockSize, StatBlock** _idStats, int _numBlocks, FEBat
 	team1 = -1;
 	team2 = -1;
 	desiredGenerations = 0;
+	log = LogManager::getInstance();
 }
 
 
@@ -29,10 +32,10 @@ AIBreeder::~AIBreeder(void)
 	{
 		delete breedingStock[counter];
 	}
-	delete breedingStock;
-	delete runningScores;
+	delete[] breedingStock;
+	delete[] runningScores;
 	spawnPoints->freeAll();
-	delete spawnPoints;
+	delete[] spawnPoints;
 }
 
 void AIBreeder::resolveGeneration()
@@ -53,6 +56,9 @@ void AIBreeder::beginMatch()
 		arena->enter(new FEUnit(count->first->face, count->first->skin, count->first->team, count->first->stats,
 			count->first->weapon, count->first->name), count->first->x, count->first->y);
 	}
+	stringstream ss;
+	ss << "Generation " << currentGeneration << ": " << team1 << " vs " << team2;
+	log->writeLog(ss.str());
 	arena->setAI(breedingStock[team1], 1);
 	arena->setAI(breedingStock[team2], 2);
 	arena->uUFightToTheDeath(this);
@@ -62,7 +68,7 @@ void AIBreeder::takeScores(int* scores)
 {
 	runningScores[team1] += scores[1];
 	runningScores[team2] += scores[2];
-	delete scores;
+	delete[] scores;
 	//now prepare the next match
 	if(advanceTeamCounters())
 	{
@@ -167,13 +173,13 @@ void AIBreeder::getNextGeneration()
 		parents[1] = breedingStock[mother];
 		nextGen[counter] = new GeneticAI(parents, 2);
 	}
-	delete parents;
+	delete[] parents;
 	for(int counter = 0; counter < stockSize; counter++)
 	{
 		delete breedingStock[counter];
 		runningScores[counter] = 0;
 	}
-	delete breedingStock;
+	delete[] breedingStock;
 	breedingStock = nextGen;
 	team1 = 0;
 	team2 = 1;

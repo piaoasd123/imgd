@@ -92,8 +92,8 @@ void RogueGame::initialize(void)
 	spawns->insert(new spawnPoint(4, 14, 'F', 1, 2, fighter_stats, battleAxe, "Giant"));
 	spawns->insert(new spawnPoint(5, 14, 'W', 1, 2, mage_stats, fireTome, "Tim"));
 
-	AIBreeder* sampleBreeder = new AIBreeder(4, statSheet, 6, sampleBattleField, spawns);
-	sampleBreeder->breedGenerations(2);
+	AIBreeder* sampleBreeder = new AIBreeder(20, statSheet, 6, sampleBattleField, spawns);
+	sampleBreeder->breedGenerations(5);
 
 	Cell** leftPatrol = new Cell*[5];
 	leftPatrol[0] = sampleBattleField->getCell(3, 15);

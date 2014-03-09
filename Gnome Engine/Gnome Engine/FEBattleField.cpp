@@ -40,8 +40,8 @@ FEBattleField::~FEBattleField(void)
 	{
 		delete unitCounts[counter];
 	}
-	delete factionAIs;
-	delete unitCounts;
+	delete[] factionAIs;
+	delete[] unitCounts;
 }
 
 ColorChar FEBattleField::getColorChar(int x, int y)
@@ -231,7 +231,7 @@ void FEBattleField::step()
 		{
 			activeUnit->getMyLocation()->tryToMoveToCell(contents[thisOrder.endX + thisOrder.endY * width], false);
 		}
-		if(activeUnit != nullptr && thisOrder.attackTarget != nullptr && canAttack(activeUnit, thisOrder.attackTarget->getMyX(), thisOrder.attackTarget->getMyY()))
+		if(thisOrder.attackTarget != nullptr && canAttack(activeUnit, thisOrder.attackTarget->getMyX(), thisOrder.attackTarget->getMyY()))
 		{
 			activeUnit->attack(thisOrder.attackTarget, !canAttack(thisOrder.attackTarget, thisOrder.unitToMove->getMyX(), thisOrder.unitToMove->getMyY()), attacklog);
 		}
@@ -273,7 +273,7 @@ void FEBattleField::finishMoving()
 			}
 		}
 		while(unitCounts[currentTurn]->getFirst() == nullptr); //skip the turns of anyone with no units
-		if(lastTurn == currentTurn || turnCounter > 30)
+		if(lastTurn == currentTurn || turnCounter > 15)
 		{
 			//gameover
 			endMatch();
@@ -290,7 +290,7 @@ inline bool FEBattleField::canMove(FEUnit* movingUnit, int x, int y)
 {
 	bool* inefficient = getValidFinalPositions(movingUnit);
 	bool retVal = inefficient[x + y * width];
-	delete inefficient;
+	delete[] inefficient;
 	return retVal;
 }
 
@@ -306,7 +306,7 @@ inline bool FEBattleField::canAttackSpace(FEUnit* attackingUnit, int x, int y)
 {
 	bool* inefficient = getValidAttackPositions(activeUnit);
 	bool retVal = inefficient[x + y * width];
-	delete inefficient;
+	delete[] inefficient;
 	return retVal;
 }
 
@@ -431,7 +431,7 @@ bool* FEBattleField::getValidAttackPositions(FEUnit* unitToMove)
 			strikeMap[counter] = false;
 		}
 	}
-	delete standingPlaces;
+	delete[] standingPlaces;
 	return strikeMap;
 }
 

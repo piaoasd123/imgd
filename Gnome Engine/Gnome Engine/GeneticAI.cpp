@@ -18,8 +18,8 @@ GeneticAI::GeneticAI(StatBlock** _idStats, int _size)
 	{
 		initiativeOrder[counter] = idStats[counter];
 		counterTolerance[counter] = rand() % 19 - 9;
-		bloodLust[counter] = rand() % 19 - 9;
-		deathLust[counter] = rand() % 19 - 9;
+		bloodLust[counter] = rand() % 19 - 4;
+		deathLust[counter] = rand() % 19 - 4;
 	}
 	std::random_shuffle(initiativeOrder, &(initiativeOrder[size - 1]));
 	foeMovementAttraction = new int[size * size];
@@ -71,12 +71,13 @@ GeneticAI::GeneticAI(GeneticAI** parents, int numParents)
 
 GeneticAI::~GeneticAI(void)
 {
-	delete counterTolerance;
-	delete bloodLust;
-	delete deathLust;
-	delete foeMovementAttraction;
-	delete foeAttackAttraction;
-	delete friendAttraction;
+	delete[] counterTolerance;
+	delete[] bloodLust;
+	delete[] deathLust;
+	delete[] foeMovementAttraction;
+	delete[] foeAttackAttraction;
+	delete[] friendAttraction;
+	delete[] initiativeOrder;
 }
 
 inline int GeneticAI::maybeMutate(int in)

@@ -2,6 +2,7 @@
 #include "GeneticAI.h"
 #include "FEUnit.h"
 #include <string>
+#include "LogManager.h"
 
 class spawnPoint //this was a struct but I wanted a constructor
 {
@@ -42,5 +43,6 @@ private:
 	bool advanceTeamCounters(); //true indicates done
 	void getNextGeneration();
 	int desiredGenerations;
+	LogManager* log;
 };
 
