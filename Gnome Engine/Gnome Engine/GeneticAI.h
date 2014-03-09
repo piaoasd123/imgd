@@ -9,6 +9,7 @@ public:
 	GeneticAI(GeneticAI** parents, int numParents);
 	~GeneticAI(void);
 	FEMoveOrder getNextMove(FEBattleField* currentBattleField, LinkedList<FEUnit>* unitsToMove);
+	void outputAIToCSV(string name);
 private:
 	//knight
 	//archer

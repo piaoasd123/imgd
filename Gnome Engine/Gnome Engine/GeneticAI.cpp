@@ -2,6 +2,8 @@
 #include "GeneticAI.h"
 #include <algorithm>
 #include <cstdlib>
+#include <iostream>
+#include <fstream>
 
 GeneticAI::GeneticAI(StatBlock** _idStats, int _size)
 {
@@ -144,13 +146,13 @@ doubleBreak:
 					{
 						//maybe change coefficient from 10 to something else
 						thisSpaceValue += friendAttraction[movingUnitType * size + unitTypeIndex] * 10.0 /
-							currentBattleField->getDistance(retVal.unitToMove->getMyX(), retVal.unitToMove->getMyX(),
+							currentBattleField->getDistance(retVal.unitToMove->getMyX(), retVal.unitToMove->getMyY(),
 															count->first->getMyX(), count->first->getMyY());
 					}
 					else
 					{
 						thisSpaceValue += foeMovementAttraction[movingUnitType * size + unitTypeIndex] * 10.0 /
-							currentBattleField->getDistance(retVal.unitToMove->getMyX(), retVal.unitToMove->getMyX(),
+							currentBattleField->getDistance(retVal.unitToMove->getMyX(), retVal.unitToMove->getMyY(),
 															count->first->getMyX(), count->first->getMyY());
 					}
 				}
@@ -207,4 +209,62 @@ int GeneticAI::getIndexOfStat(StatBlock* stats)
 		}
 	}
 	return -1;
+}
+
+void GeneticAI::outputAIToCSV(string name)
+{
+	ofstream svFile;
+	svFile.open(name);
+	svFile << size << '\n';
+	for(int counter = 0; counter < size; counter++)
+	{
+		for(int counte = 0; counte < size; counte++)
+		{
+			if(idStats[counte] == initiativeOrder[counter])
+			{
+				svFile << counte << ',';
+				break;
+			}
+		}
+	}
+	svFile << '\n';
+	for(int counter = 0; counter < size; counter++)
+	{
+		for(int counte = 0; counte < size; counte++)
+		{
+			svFile << foeMovementAttraction[counter * size + counte] << ',';
+		}
+		svFile << '\n';
+	}
+	for(int counter = 0; counter < size; counter++)
+	{
+		for(int counte = 0; counte < size; counte++)
+		{
+			svFile << foeAttackAttraction[counter * size + counte] << ',';
+		}
+		svFile << '\n';
+	}
+	for(int counter = 0; counter < size; counter++)
+	{
+		for(int counte = 0; counte < size; counte++)
+		{
+			svFile << friendAttraction[counter * size + counte] << ',';
+		}
+		svFile << '\n';
+	}
+	for(int counter = 0; counter < size; counter++)
+	{
+		svFile << counterTolerance[counter] << ',';
+	}
+	svFile << '\n';
+	for(int counter = 0; counter < size; counter++)
+	{
+		svFile << bloodLust[counter] << ',';
+	}
+	svFile << '\n';
+	for(int counter = 0; counter < size; counter++)
+	{
+		svFile << deathLust[counter] << ',';
+	}
+	svFile.close();
 }

@@ -76,6 +76,31 @@ void AIBreeder::takeScores(int* scores)
 			//done; output the best to a file or something
 			arena->setAI(nullptr, 1);
 			arena->setAI(nullptr, 2);
+			//save the 3 best AIs
+			int bestScores[3] = {0, 0, 0};
+			for(int counter = 1; counter < stockSize; counter++)
+			{
+				for(int counte = 0; counte < 3; counte++)
+				{
+					if(runningScores[bestScores[counte]] < runningScores[counter])
+					{
+						int temp = bestScores[counte];
+						int tem;
+						bestScores[counte] = counter;
+						for(int count = counte + 1; count < 3; count++)
+						{
+							tem = bestScores[count];
+							bestScores[count] = temp;
+							temp = tem;
+						}
+						break;
+					}
+				}
+			}
+			breedingStock[bestScores[0]]->outputAIToCSV("bestAI.csv");
+			breedingStock[bestScores[1]]->outputAIToCSV("secondBestAI.csv");
+			breedingStock[bestScores[2]]->outputAIToCSV("thirdBestAI.csv");
+			return;
 		}
 	}
 	beginMatch();
