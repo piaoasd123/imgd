@@ -7,6 +7,7 @@ class GeneticAI :	public FEAIInterface
 public:
 	GeneticAI(StatBlock** _idStats, int _size);
 	GeneticAI(GeneticAI** parents, int numParents);
+	GeneticAI(StatBlock** _idStats, int _size, string csvFile);
 	~GeneticAI(void);
 	FEMoveOrder getNextMove(FEBattleField* currentBattleField, LinkedList<FEUnit>* unitsToMove);
 	void outputAIToCSV(string name);

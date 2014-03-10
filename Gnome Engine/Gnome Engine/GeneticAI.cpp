@@ -269,3 +269,26 @@ void GeneticAI::outputAIToCSV(string name)
 	}
 	svFile.close();
 }
+
+//finish this func
+GeneticAI::GeneticAI(StatBlock** _idStats, int _size, string csvFile)
+{
+	idStats = _idStats;
+	size = _size;
+	//randomly generate everything else
+	initiativeOrder = new StatBlock*[size];
+	counterTolerance = new int[size];
+	bloodLust = new int[size];
+	deathLust = new int[size];
+	foeMovementAttraction = new int[size * size];
+	foeAttackAttraction = new int[size * size];
+	friendAttraction = new int[size * size];
+	ifstream svFile;
+	svFile.open(csvFile);
+	string dummy;
+	getline( svFile, dummy, '\n' ); //eat size
+	for(int counter = 0; counter < size; counter++)
+	{
+		getline( svFile, dummy, ',' );
+	}
+}
