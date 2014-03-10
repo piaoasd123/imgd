@@ -222,7 +222,7 @@ void FEBattleField::step()
 {
 	flashCounter = (flashCounter + 1) % 15;
 	moveCounter++;
-	if(/*moveCounter >= 24 &&*/ factionAIs[currentTurn] != nullptr) //put the moveCounter back in for actual human play
+	if(moveCounter >= 24 && factionAIs[currentTurn] != nullptr) //put the moveCounter back in for actual human play
 	{
 		FEMoveOrder thisOrder = factionAIs[currentTurn]->getNextMove(this, unitsToMove);
 		//execute the order

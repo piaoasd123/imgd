@@ -59,9 +59,9 @@ void CycleManager::runGame(void)
 		//render game world
 		graph->updateScreen();
 		//wait until 1/30 sec
-		/*timeLeft = 33 - timer.checkCount().QuadPart;
+		timeLeft = 33 - timer.checkCount().QuadPart;
 		if(timeLeft > 0)
-			Sleep(timeLeft);*/
+			Sleep(timeLeft);
 	}
 }
 

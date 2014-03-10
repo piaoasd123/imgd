@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 GeneticAI::GeneticAI(StatBlock** _idStats, int _size)
 {
@@ -284,11 +285,95 @@ GeneticAI::GeneticAI(StatBlock** _idStats, int _size, string csvFile)
 	foeAttackAttraction = new int[size * size];
 	friendAttraction = new int[size * size];
 	ifstream svFile;
-	svFile.open(csvFile);
-	string dummy;
-	getline( svFile, dummy, '\n' ); //eat size
+	std::ifstream in(csvFile, std::ios::in | std::ios::binary);
+	string contents;
+	if (in)
+	{
+		in.seekg(0, std::ios::end);
+		contents.resize(in.tellg());
+		in.seekg(0, std::ios::beg);
+		in.read(&contents[0], contents.size());
+		in.close();
+	}
+	int nextCharIndex = 2; //after the size
+	int readNum;
+	int charIndexHolder;
 	for(int counter = 0; counter < size; counter++)
 	{
-		getline( svFile, dummy, ',' );
+		charIndexHolder = contents.find(',', nextCharIndex);
+		string nextNum = contents.substr(nextCharIndex, charIndexHolder);
+		istringstream tempStream(nextNum);
+		tempStream >> readNum;
+		initiativeOrder[counter] = idStats[readNum];
+		nextCharIndex = charIndexHolder + 1;
+	}
+	nextCharIndex++; //pass the newline
+	for(int counter = 0; counter < size; counter++)
+	{
+		for(int counte = 0; counte < size; counte++)
+		{
+			charIndexHolder = contents.find(',', nextCharIndex);
+			string nextNum = contents.substr(nextCharIndex, charIndexHolder);
+			istringstream tempStream(nextNum);
+			tempStream >> readNum;
+			foeMovementAttraction[counter * size + counte] = readNum;
+			nextCharIndex = charIndexHolder + 1;
+		}
+		nextCharIndex++; //pass the newline
+	}
+	for(int counter = 0; counter < size; counter++)
+	{
+		for(int counte = 0; counte < size; counte++)
+		{
+			charIndexHolder = contents.find(',', nextCharIndex);
+			string nextNum = contents.substr(nextCharIndex, charIndexHolder);
+			istringstream tempStream(nextNum);
+			tempStream >> readNum;
+			foeAttackAttraction[counter * size + counte] = readNum;
+			nextCharIndex = charIndexHolder + 1;
+		}
+		nextCharIndex++; //pass the newline
+	}
+	for(int counter = 0; counter < size; counter++)
+	{
+		for(int counte = 0; counte < size; counte++)
+		{
+			charIndexHolder = contents.find(',', nextCharIndex);
+			string nextNum = contents.substr(nextCharIndex, charIndexHolder);
+			istringstream tempStream(nextNum);
+			tempStream >> readNum;
+			friendAttraction[counter * size + counte] = readNum;
+			nextCharIndex = charIndexHolder + 1;
+		}
+		nextCharIndex++; //pass the newline
+	}
+	for(int counter = 0; counter < size; counter++)
+	{
+		charIndexHolder = contents.find(',', nextCharIndex);
+		string nextNum = contents.substr(nextCharIndex, charIndexHolder);
+		istringstream tempStream(nextNum);
+		tempStream >> readNum;
+		counterTolerance[counter] = readNum;
+		nextCharIndex = charIndexHolder + 1;
+	}
+	nextCharIndex++; //pass the newline
+	for(int counter = 0; counter < size; counter++)
+	{
+		charIndexHolder = contents.find(',', nextCharIndex);
+		string nextNum = contents.substr(nextCharIndex, charIndexHolder);
+		istringstream tempStream(nextNum);
+		tempStream >> readNum;
+		bloodLust[counter] = readNum;
+		nextCharIndex = charIndexHolder + 1;
+	}
+	nextCharIndex++; //pass the newline
+	for(int counter = 0; counter < size; counter++)
+	{
+		charIndexHolder = contents.find(',', nextCharIndex);
+		string nextNum = contents.substr(nextCharIndex, charIndexHolder);
+		istringstream tempStream(nextNum);
+		tempStream >> readNum;
+		deathLust[counter] = readNum;
+		nextCharIndex = charIndexHolder + 1;
 	}
 }
