@@ -35,7 +35,7 @@ private:
 	FEUnit* activeUnit; //this unit is selected
 	int cursorX;
 	int cursorY;
-	int moveCounter;
+	//int moveCounter;
 	int flashCounter;
 	int currentTurn; //whose turn it is
 	int numPlayers;

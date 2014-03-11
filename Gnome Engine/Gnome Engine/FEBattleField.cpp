@@ -12,7 +12,7 @@ FEBattleField::FEBattleField(int numberOfPlayers, int height, int width, FEStatV
 	activeUnit = nullptr;
 	cursorX = 0;
 	cursorY = 0;
-	moveCounter = 0;
+	//moveCounter = 0;
 	flashCounter = 0;
 	currentTurn = 1;
 	numPlayers = numberOfPlayers + 1; //zero is reserved for terrain
@@ -141,9 +141,9 @@ void FEBattleField::exit(int x, int y)
 
 void FEBattleField::takeInput(char in) //finish this function
 {
-	if(moveCounter > 4 && factionAIs[currentTurn] == nullptr)
+	if(/*moveCounter > 4 &&*/ factionAIs[currentTurn] == nullptr)
 	{
-		moveCounter = 0;
+		//moveCounter = 0;
 		//if there's a num key, move the cursor
 		if(in >= '1' && in <= '9')
 		{
@@ -231,7 +231,7 @@ void FEBattleField::step()
 		return;
 	}
 	flashCounter = (flashCounter + 1) % 15;
-	moveCounter++;
+	//moveCounter++;
 	if(/*moveCounter >= 24 &&*/ factionAIs[currentTurn] != nullptr) //put the moveCounter back in for actual human play
 	{
 		FEMoveOrder thisOrder = factionAIs[currentTurn]->getNextMove(this, unitsToMove);
@@ -246,7 +246,7 @@ void FEBattleField::step()
 			activeUnit->attack(thisOrder.attackTarget, !canAttack(thisOrder.attackTarget, thisOrder.unitToMove->getMyX(), thisOrder.unitToMove->getMyY()), attacklog);
 		}
 		finishMoving();
-		moveCounter = 0;
+		//moveCounter = 0;
 	}
 }
 
