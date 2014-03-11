@@ -31,6 +31,7 @@ FEBattleField::FEBattleField(int numberOfPlayers, int height, int width, FEStatV
 	turnCounter = 1;
 	log->sendMessage("Player 1: Turn 1");
 	scoreKeeper = nullptr;
+	matchOver = false;
 }
 
 
@@ -125,12 +126,23 @@ void FEBattleField::exit(int x, int y)
 {
 	if(contents[x + y * width]->getOccupant() != nullptr)
 	{
+		if( x == 0 && y == 1 && scoreKeeper->currentGeneration == 3 && scoreKeeper->team1 == 17 && scoreKeeper->team2 == 8 && currentTurn == 2 && turnCounter == 15)
+		{
+			int debug = 0;
+		}
 		if(contents[x + y * width]->getOccupant() == activeUnit)
 		{
 			finishMoving();
 		}
-		unitCounts[static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getPlayer()]->remove(static_cast<FEUnit*>(contents[x + y * width]->getOccupant()));
-		unitsToMove->remove(static_cast<FEUnit*>(contents[x + y * width]->getOccupant()));
+		if(contents[x + y * width]->getOccupant() != nullptr) //finish moving might end the game, which means this may have exitted
+		{
+			unitCounts[static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getPlayer()]->remove(static_cast<FEUnit*>(contents[x + y * width]->getOccupant()));
+			unitsToMove->remove(static_cast<FEUnit*>(contents[x + y * width]->getOccupant()));
+		}
+		else
+		{
+			int debug = 0;
+		}
 	}
 	Dungeon::exit(x, y);
 }
@@ -220,9 +232,15 @@ void FEBattleField::takeInput(char in) //finish this function
 
 void FEBattleField::step()
 {
+	if(matchOver)
+	{
+		matchOver = false;
+		endMatch(); //don't end the match midstate
+		return;
+	}
 	flashCounter = (flashCounter + 1) % 15;
 	moveCounter++;
-	if(moveCounter >= 24 && factionAIs[currentTurn] != nullptr) //put the moveCounter back in for actual human play
+	if(/*moveCounter >= 24 &&*/ factionAIs[currentTurn] != nullptr) //put the moveCounter back in for actual human play
 	{
 		FEMoveOrder thisOrder = factionAIs[currentTurn]->getNextMove(this, unitsToMove);
 		//execute the order
@@ -276,7 +294,7 @@ void FEBattleField::finishMoving()
 		if(lastTurn == currentTurn || turnCounter > 15)
 		{
 			//gameover
-			endMatch();
+			matchOver = true;
 		}
 		delete unitsToMove;
 		unitsToMove = unitCounts[currentTurn]->copyList();
@@ -514,52 +532,52 @@ void FEBattleField::endMatch()
 			}
 
 		}
-		if(lastManStanding > 0) //there was a winner
+	}
+	if(lastManStanding > 0) //there was a winner
+	{
+		stringstream ss;
+		ss << "Player " << lastManStanding << " is victorious!";
+		attacklog->sendMessage(ss.str());
+	}
+	else
+	{
+		stringstream ss;
+		ss << "Timout: Draw!";
+		attacklog->sendMessage(ss.str());
+	}
+	//score players
+	int* scores = new int[numPlayers];
+	for(int counter = 1; counter <  numPlayers; counter++)
+	{
+		scores[counter] = 0;
+		if(lastManStanding == counter)
 		{
-			stringstream ss;
-			ss << "Player " << lastManStanding << " is victorious!";
-			attacklog->sendMessage(ss.str());
+			scores[counter] += 10;
 		}
-		else
+		for(int counte = 1; counte <  numPlayers; counte++)
 		{
-			stringstream ss;
-			ss << "Timout: Draw!";
-			attacklog->sendMessage(ss.str());
-		}
-		//score players
-		int* scores = new int[numPlayers];
-		for(int counter = 1; counter <  numPlayers; counter++)
-		{
-			scores[counter] = 0;
-			if(lastManStanding == counter)
+			if(counter != counte)
 			{
-				scores[counter] += 10;
-			}
-			for(int counte = 1; counte <  numPlayers; counte++)
-			{
-				if(counter != counte)
+				//6 is a fair baseline, but it should be the max number of units if possible
+				scores[counter] += 6;
+				forEach(FEUnit, count, getPlayerUnits(counte)->getFirst())
 				{
-					//6 is a fair baseline, but it should be the max number of units if possible
-					scores[counter] += 6;
-					forEach(FEUnit, count, getPlayerUnits(counte)->getFirst())
-					{
-						scores[counter] -= 1;
-					}
-				}
-				else
-				{
-					forEach(FEUnit, count, getPlayerUnits(counte)->getFirst())
-					{
-						scores[counter] += 1;
-					}
+					scores[counter] -= 1;
 				}
 			}
+			else
+			{
+				forEach(FEUnit, count, getPlayerUnits(counte)->getFirst())
+				{
+					scores[counter] += 1;
+				}
+			}
 		}
-		//do something with the scores
-		if(scoreKeeper != nullptr)
-		{
-			scoreKeeper->takeScores(scores);
-		}
+	}
+	//do something with the scores
+	if(scoreKeeper != nullptr)
+	{
+		scoreKeeper->takeScores(scores);
 	}
 }
 
@@ -576,4 +594,9 @@ void FEBattleField::uUFightToTheDeath(AIBreeder* scoreWanter)
 	scoreKeeper = scoreWanter;
 	turnCounter = 1;
 	attacklog->sendMessage("Player 1: Turn 1");
+}
+
+int FEBattleField::getCurrentTurn()
+{
+	return turnCounter;
 }

@@ -25,6 +25,29 @@ AIBreeder::AIBreeder(int _stockSize, StatBlock** _idStats, int _numBlocks, FEBat
 	log = LogManager::getInstance();
 }
 
+AIBreeder::AIBreeder(int _stockSize, StatBlock** _idStats, int _numBlocks, FEBattleField* _arena, LinkedList<spawnPoint>* _spawnPoints, string loadDirectory)
+{
+	currentGeneration = 1;
+	stockSize = _stockSize;
+	numBlocks = _numBlocks;
+	idStats = _idStats;
+	breedingStock = new GeneticAI*[stockSize];
+	runningScores = new int[stockSize];
+	for(int counter = 0; counter < stockSize; counter++)
+	{
+		stringstream ss;
+		ss << loadDirectory << '/' << counter << ".csv";
+		breedingStock[counter] = new GeneticAI(idStats, numBlocks, ss.str());
+		runningScores[counter] = 0;
+	}
+	arena = _arena;
+	spawnPoints = _spawnPoints;
+	midGeneration = false;
+	team1 = -1;
+	team2 = -1;
+	desiredGenerations = 0;
+	log = LogManager::getInstance();
+}
 
 AIBreeder::~AIBreeder(void)
 {
@@ -82,7 +105,15 @@ void AIBreeder::takeScores(int* scores)
 			//done; output the best to a file or something
 			arena->setAI(nullptr, 1);
 			arena->setAI(nullptr, 2);
-			//save the 3 best AIs
+			getNextGeneration();
+			//save all the AIs
+			for(int counter = 0; counter < stockSize; counter++)
+			{
+				stringstream ss;
+				ss << "lastGeneration/" << counter << ".csv";
+				breedingStock[counter]->outputAIToCSV(ss.str());
+			}
+			/*//save the 3 best AIs
 			int bestScores[3] = {0, 0, 0};
 			for(int counter = 1; counter < stockSize; counter++)
 			{
@@ -105,7 +136,7 @@ void AIBreeder::takeScores(int* scores)
 			}
 			breedingStock[bestScores[0]]->outputAIToCSV("bestAI.csv");
 			breedingStock[bestScores[1]]->outputAIToCSV("secondBestAI.csv");
-			breedingStock[bestScores[2]]->outputAIToCSV("thirdBestAI.csv");
+			breedingStock[bestScores[2]]->outputAIToCSV("thirdBestAI.csv");*/
 			return;
 		}
 	}

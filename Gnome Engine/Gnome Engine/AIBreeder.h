@@ -23,6 +23,7 @@ class AIBreeder
 {
 public:
 	AIBreeder(int _stockSize, StatBlock** _idStats, int _numBlocks, FEBattleField* arena, LinkedList<spawnPoint>* _spawnPoints);
+	AIBreeder(int _stockSize, StatBlock** _idStats, int _numBlocks, FEBattleField* arena, LinkedList<spawnPoint>* _spawnPoints, string loadDirectory);
 	~AIBreeder(void);
 	void resolveGeneration(); //have all existing ais fight and create new ones based on the results
 	void takeScores(int* scores);
@@ -44,5 +45,8 @@ private:
 	void getNextGeneration();
 	int desiredGenerations;
 	LogManager* log;
+
+//debug
+	friend class FEBattleField;
 };
 

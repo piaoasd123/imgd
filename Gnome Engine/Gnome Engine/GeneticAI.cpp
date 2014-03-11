@@ -83,9 +83,9 @@ GeneticAI::~GeneticAI(void)
 
 inline int GeneticAI::maybeMutate(int in)
 {
-	if((rand() % 10) == 7)
+	if((rand() % 8) == 7)
 	{
-		return in + (rand() % 10 == 7);
+		return in + (rand() % 9 - 4);
 	}
 	else
 	{
@@ -164,6 +164,10 @@ doubleBreak:
 				forEach(FEUnit, count, targets->getFirst())
 				{
 					double thisTargetValue = bloodLust[movingUnitType];
+					if(currentBattleField->getCurrentTurn() > 9) //this is a hack to reduce peace
+					{
+						thisTargetValue += 40;
+					}
 					int thisTargetIndex = getIndexOfStat(count->first->getStats());
 					thisTargetValue += foeAttackAttraction[movingUnitType * size + thisTargetIndex];
 					if(count->first->inRange(currentBattleField->getDistance(counter % currentBattleField->getMyX(),

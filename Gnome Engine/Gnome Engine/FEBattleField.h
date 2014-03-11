@@ -30,6 +30,7 @@ public:
 	LinkedList<FEUnit>* getPossibleAttackTargets(int x, int y, int player, Item* weapon);
 	void killAllUnits(); //leaves rocks in place
 	void uUFightToTheDeath(AIBreeder* scoreWanter); //fights a battle returns an array of the scores of the teams
+	int getCurrentTurn(); //this probably won't be called much
 private:
 	FEUnit* activeUnit; //this unit is selected
 	int cursorX;
@@ -52,4 +53,5 @@ private:
 	int turnCounter;
 	void endMatch(); //this will be used to reset the map for the next round
 	AIBreeder* scoreKeeper;
+	bool matchOver;
 };

@@ -77,7 +77,7 @@ void RogueGame::initialize(void)
 	statSheet[5] = mage_stats;
 
 	//sampleBattleField->setAI(new GeneticAI(statSheet, 6), 2);
-	/*LinkedList<spawnPoint>* spawns = new LinkedList<spawnPoint>();
+	LinkedList<spawnPoint>* spawns = new LinkedList<spawnPoint>();
 	spawns->insert(new spawnPoint(3, 7, 'K', 4, 1, knight_stats, armingSword, "Lancelot"));
 	spawns->insert(new spawnPoint(4, 7, 'A', 4, 1, archer_stats, recurveBow, "Robin"));
 	spawns->insert(new spawnPoint(5, 7, 'C', 4, 1, cavalier_stats, impailer, "Arthur"));
@@ -90,10 +90,10 @@ void RogueGame::initialize(void)
 	spawns->insert(new spawnPoint(5, 15, 'C', 1, 2, cavalier_stats, impailer, "Frenchman"));
 	spawns->insert(new spawnPoint(6, 15, 'S', 1, 2, swashbuckler_stats, cutlass, "Herbert"));
 	spawns->insert(new spawnPoint(4, 14, 'F', 1, 2, fighter_stats, battleAxe, "Giant"));
-	spawns->insert(new spawnPoint(5, 14, 'W', 1, 2, mage_stats, fireTome, "Tim"));*/
+	spawns->insert(new spawnPoint(5, 14, 'W', 1, 2, mage_stats, fireTome, "Tim"));
 
-	//AIBreeder* sampleBreeder = new AIBreeder(20, statSheet, 6, sampleBattleField, spawns);
-	//sampleBreeder->breedGenerations(15);
+	AIBreeder* sampleBreeder = new AIBreeder(20, statSheet, 6, sampleBattleField, spawns, "lastGeneration");
+	sampleBreeder->breedGenerations(3); //do this in 5 stages
 
 	Cell** leftPatrol = new Cell*[5];
 	leftPatrol[0] = sampleBattleField->getCell(3, 15);
@@ -119,8 +119,8 @@ void RogueGame::initialize(void)
 	FEUnit* giant = new FEUnit('F', 1, 2, fighter_stats, battleAxe, "Giant");
 	FEUnit* tim = new FEUnit('W', 1, 2, mage_stats, fireTome, "Tim");
 
-	sampleBattleField->setAI(new GeneticAI(statSheet, 6, "bestAI.csv"), 1);
-	sampleBattleField->setAI(nullptr, 2);
+	/*sampleBattleField->setAI(new GeneticAI(statSheet, 6, "bestAI.csv"), 1);
+	sampleBattleField->setAI(nullptr, 2);*/
 
 	sampleBattleField->enter(lancelot, 3, 7);
 	sampleBattleField->enter(arthur, 4, 7);
