@@ -110,10 +110,10 @@ void AIBreeder::takeScores(int* scores)
 			for(int counter = 0; counter < stockSize; counter++)
 			{
 				stringstream ss;
-				ss << "lastGeneration/" << counter << ".csv";
+				ss << "lastGeneration/" <<counter << ".csv";
 				breedingStock[counter]->outputAIToCSV(ss.str());
 			}
-			/*//save the 3 best AIs
+			//save the 3 best AIs
 			int bestScores[3] = {0, 0, 0};
 			for(int counter = 1; counter < stockSize; counter++)
 			{
@@ -136,7 +136,7 @@ void AIBreeder::takeScores(int* scores)
 			}
 			breedingStock[bestScores[0]]->outputAIToCSV("bestAI.csv");
 			breedingStock[bestScores[1]]->outputAIToCSV("secondBestAI.csv");
-			breedingStock[bestScores[2]]->outputAIToCSV("thirdBestAI.csv");*/
+			breedingStock[bestScores[2]]->outputAIToCSV("thirdBestAI.csv");
 			return;
 		}
 	}

@@ -126,10 +126,6 @@ void FEBattleField::exit(int x, int y)
 {
 	if(contents[x + y * width]->getOccupant() != nullptr)
 	{
-		if( x == 0 && y == 1 && scoreKeeper->currentGeneration == 3 && scoreKeeper->team1 == 17 && scoreKeeper->team2 == 8 && currentTurn == 2 && turnCounter == 15)
-		{
-			int debug = 0;
-		}
 		if(contents[x + y * width]->getOccupant() == activeUnit)
 		{
 			finishMoving();
@@ -138,10 +134,6 @@ void FEBattleField::exit(int x, int y)
 		{
 			unitCounts[static_cast<FEUnit*>(contents[x + y * width]->getOccupant())->getPlayer()]->remove(static_cast<FEUnit*>(contents[x + y * width]->getOccupant()));
 			unitsToMove->remove(static_cast<FEUnit*>(contents[x + y * width]->getOccupant()));
-		}
-		else
-		{
-			int debug = 0;
 		}
 	}
 	Dungeon::exit(x, y);

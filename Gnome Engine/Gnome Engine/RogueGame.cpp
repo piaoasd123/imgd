@@ -24,7 +24,7 @@ void RogueGame::initialize(void)
 	MapManager* mapmgr = MapManager::getInstance();
 	GraphicsManager* graph = GraphicsManager::getInstance();
 	FEStatViewer* sampleStatViewer = new FEStatViewer();
-	FEConsole* sampleConsole = new FEConsole(30, 10);
+	FEConsole* sampleConsole = new FEConsole(30, 14);
 	FEBattleField* sampleBattleField = new FEBattleField(2, 20, 10, sampleStatViewer, sampleConsole);
 	int map[200] = {0, 0, 1, 1, 1, 1, 1, 1, 0, 0,
 					0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -92,8 +92,8 @@ void RogueGame::initialize(void)
 	spawns->insert(new spawnPoint(4, 14, 'F', 1, 2, fighter_stats, battleAxe, "Giant"));
 	spawns->insert(new spawnPoint(5, 14, 'W', 1, 2, mage_stats, fireTome, "Tim"));
 
-	AIBreeder* sampleBreeder = new AIBreeder(20, statSheet, 6, sampleBattleField, spawns, "lastGeneration");
-	sampleBreeder->breedGenerations(3); //do this in 5 stages
+	//AIBreeder* sampleBreeder = new AIBreeder(20, statSheet, 6, sampleBattleField, spawns, "lastGeneration");
+	//sampleBreeder->breedGenerations(3); //do this in 5 stages
 
 	Cell** leftPatrol = new Cell*[5];
 	leftPatrol[0] = sampleBattleField->getCell(3, 15);
@@ -119,8 +119,8 @@ void RogueGame::initialize(void)
 	FEUnit* giant = new FEUnit('F', 1, 2, fighter_stats, battleAxe, "Giant");
 	FEUnit* tim = new FEUnit('W', 1, 2, mage_stats, fireTome, "Tim");
 
-	/*sampleBattleField->setAI(new GeneticAI(statSheet, 6, "bestAI.csv"), 1);
-	sampleBattleField->setAI(nullptr, 2);*/
+	sampleBattleField->setAI(new GeneticAI(statSheet, 6, "bestAI.csv"), 2);
+	sampleBattleField->setAI(nullptr, 1);
 
 	sampleBattleField->enter(lancelot, 3, 7);
 	sampleBattleField->enter(arthur, 4, 7);
@@ -142,7 +142,7 @@ void RogueGame::initialize(void)
 	graph->insert(cam);
 	Camera* cam2 = new Camera(sampleStatViewer, 12, 0, 0, 0, 12, 8);
 	graph->insert(cam2);
-	Camera* cam3 = new Camera(sampleConsole, 12, 8, 0, 0, 30, 10);
+	Camera* cam3 = new Camera(sampleConsole, 12, 8, 0, 0, 30, 14);
 	graph->insert(cam3);
 	mapmgr->activateMap(sampleBattleField);
 	mapmgr->registerForInput(sampleBattleField);
